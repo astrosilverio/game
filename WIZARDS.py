@@ -131,12 +131,12 @@ def go(direction):
 	if direction == 'd' and you.flying == True:
 		if you.location.name == 'Flying':
 			you.flying = False
-			print "You have successfully dismounted."
+			print "You have successfully dismounted.\n"
 			you.location = quidditch
 			return you.location.look()
 		else:
 			you.flying = False
-			print "You have successfully dismounted."
+			print "You have successfully dismounted.\n"
 			print you.location.name
 			return you.location.look()
 	if next:
@@ -144,7 +144,7 @@ def go(direction):
 			next.try_to_enter()
 		else:
 			you.location = next
-			print you.location.name
+			print you.location.name + '\n'
 			return you.location.look()
 	else:
 		print "You can't go that way!"

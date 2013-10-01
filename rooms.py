@@ -15,13 +15,14 @@ class Room(Scene):
 		self.paths.update(paths)
 		
 	def look(self):
-		print self.description + '\n'
+		output = self.description + '\n'
 		for name, thing in self.invent.items():
-			print thing.description
+			output = output + '\n' + thing.description + '\n'
+		print output
 				
 	def accio(self, thing):
 		if 'wand' in inventory.invent.keys():
-			self.move(thing, inventory)
+			return self.move(thing, inventory)
 		else:
 			print "You need your wand to do that!"
 		
