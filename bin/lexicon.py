@@ -26,7 +26,7 @@ def find_spells(s):
 
 def find_verbs(s):
 	if s in verbs:
-		return ('verb', s)
+		return ('verb', verbs[s])
 	else:
 		return None
 

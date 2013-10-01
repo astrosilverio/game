@@ -38,11 +38,22 @@ def process_verb(parts, specs):
 			verb = ''
 			object = ''
 			error = "What are you saying?"
-	elif specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'look' or specs[0] == 'where':
+	elif specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'look' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save':
 		subject = ''
 		verb = ''
 		object = ''
 		error = "Those verbs don't take objects, what's up?"
+	elif specs[0] == 'examine' or specs[0] == 'x':
+		if parts[1] == 'noun':
+			subject = 'player'
+			verb = 'x'
+			object = specs[1]
+			error = ''
+		else:
+			subject = ''
+			verb = ''
+			object = ''
+			error = "I can't examine that."
 	elif specs[0] == 'talk':
 		if parts[1] == 'person':
 			subject = 'player'
@@ -75,7 +86,12 @@ def process_verb(parts, specs):
 			subject = ''
 			verb = ''
 			object = ''
-			error = "You can't accio that."		
+			error = "You can't accio that."
+	elif specs[0] == 'ride' and specs[1] == 'broom':
+		subject = 'player'
+		verb = 'fly'
+		object = 'broom'
+		error = ''	
 	else:
 		if parts[1] == 'noun':
 			subject = 'player'
@@ -99,16 +115,21 @@ def single_word(parts, specs):
 		object = specs[0]
 		error = ''
 	elif parts[0] == 'verb':
-		if specs[0] == 'get' or specs[0] == 'sort' or specs[0] == 'take' or specs[0] == 'drop' or specs[0] == 'put' or specs[0] == 'look' or specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'eat' or specs[0] == 'where':
+		if specs[0] == 'get' or specs[0] == 'sort' or specs[0] == 'take' or specs[0] == 'drop' or specs[0] == 'put' or specs[0] == 'look' or specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'eat' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save':
 			subject = 'player'
 			verb = specs[0]
 			object = ''
 			error = ''
-		elif specs[0] == 'fly':
+		elif specs[0] == 'fly' or specs[0] == 'ride':
 			subject = 'player'
 			verb = 'fly'
 			object = 'broom'
 			error=''
+		elif specs[0] == 'x' or specs[0] == 'examine':
+			subject = ''
+			verb = ''
+			object = ''
+			error = "What do you want me to examine?"
 		else:
 			subject = ''
 			verb = ''

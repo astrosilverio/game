@@ -7,6 +7,7 @@ from rooms import *
 from things import *
 from spells import *
 from riddles import *
+from bin import help
 
 
 start = Room("The Quad","You are standing outside a wizarding school in Scotland. The entrance to the castle is to the north. Paths lead east, west, and south.")
@@ -124,8 +125,6 @@ flying.add_invent(snitch)
 
 
 
-you.location = start
-
 def go(direction):
 	next = you.location.paths.get(direction, None)
 	if direction == 'd' and you.flying == True:
@@ -211,6 +210,25 @@ def process(input):
 			return sortingquiz.try_to_enter()
 		elif 'where' in verb:
 			return where()
+		elif 'help' in verb:
+			return help.help()
+		elif 'quit' in verb:
+			save = raw_input("Leave without saving? (y/n)"  )
+			if save == 'y':
+				exit(0)
+			else:
+				pass
+		elif 'save' in verb:
+			if you.name:
+				confirm = raw_input("Save as " + you.name + "? (y/n)  ")
+			else:
+				you.name = raw_input("Save under what name? ")
+				
+		elif 'x' in verb:
+			if object in inventory.invent.keys() or object in you.location.invent.keys():
+				return objectlist[object].examine()
+			else:
+				print "I don't see that here."
 		elif 'parseltongue' in verb:
 			if you.location.name == "Myrtle's Bathroom":
 				print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
@@ -223,7 +241,10 @@ def process(input):
 						
 	else:
 		return None
-					
+		
+		
+		
+you.location = start					
 start.look()
 stair_hall.initialize()
 
