@@ -38,7 +38,7 @@ def process_verb(parts, specs):
 			verb = ''
 			object = ''
 			error = "What are you saying?"
-	elif specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'look' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save':
+	elif specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'look' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save' or specs[0] == 'load':
 		subject = ''
 		verb = ''
 		object = ''
@@ -115,7 +115,7 @@ def single_word(parts, specs):
 		object = specs[0]
 		error = ''
 	elif parts[0] == 'verb':
-		if specs[0] == 'get' or specs[0] == 'sort' or specs[0] == 'take' or specs[0] == 'drop' or specs[0] == 'put' or specs[0] == 'look' or specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'eat' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save':
+		if specs[0] == 'get' or specs[0] == 'sort' or specs[0] == 'take' or specs[0] == 'drop' or specs[0] == 'put' or specs[0] == 'look' or specs[0] == 'invent' or specs[0] == 'inventory' or specs[0] == 'eat' or specs[0] == 'where' or specs[0] == 'quit' or specs[0] == 'help' or specs[0] == 'save' or specs[0] == 'load':
 			subject = 'player'
 			verb = specs[0]
 			object = ''

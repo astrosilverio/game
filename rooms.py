@@ -15,9 +15,9 @@ class Room(Scene):
 		self.paths.update(paths)
 		
 	def look(self):
-		output = self.description + '\n'
+		output = self.description + '\n\n'
 		for name, thing in self.invent.items():
-			output = output + '\n' + thing.description + '\n'
+			output = output + thing.description + '\n'
 		print output
 				
 	def accio(self, thing):

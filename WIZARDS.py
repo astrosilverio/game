@@ -8,6 +8,8 @@ from things import *
 from spells import *
 from riddles import *
 from bin import help
+import pickle
+import pdb
 
 
 start = Room("The Quad","You are standing outside a wizarding school in Scotland. The entrance to the castle is to the north. Paths lead east, west, and south.")
@@ -29,9 +31,9 @@ sortingquiz = SortingQuiz(quiz)
 negreathall = GreatHall("NEGreatHall", "You are in the NE corner of the Great Hall. A doorway lies behind a tapestry to the north, and a stairway leads down.", sortingquiz)
 swgreathall = Room("SWGreatHall", "You are in the SW corner of the Great Hall. There is a broad archway in the west wall.")
 segreathall = Room("SEGreatHall", "You are in the SE corner of the Great Hall. There is a stairway to the south and a door to the east.")
-disusedroom = Room("Disused", "You are in a disused classroom.")
+disusedroom = Room("Disused Room", "You are in a disused classroom.")
 divination = Room("Divination", "You are in the Divining classroom.")
-trophy = Room("Trophy", "You are in the trophy room.")
+trophy = Room("Trophy Room", "You are in the trophy room.")
 nbasecorr = Room("North Basement Corridor", "You are at the northern end of a basement corridor. The hall is filled with the smell of baking bread. The kitchens are through a low archway to the east and there is a circular door in the wall to the north.")
 sbasecorr = Room("South Basement Corridor", "You are at the southern end of a basement corridor. It is decidedly less pleasant here than the northern end. The walls are covered with foul slime. A heavy door is in the south wall. Emerald green gems light the stairway leading down.")
 hufflepuff = Room("Hufflepuff", "You are in the Hufflepuff Common Room. It is full of overstuffed armchairs. There is a large tapestry on the east wall and a fireplace on the west wall.")
@@ -40,13 +42,13 @@ emeraldhall = Room("Emerald Hall", "You are in a hall encrusted with emeralds. A
 slytherin = Password("Slytherin", "You are in the Slyterin Common Room. There are windows that appear to look out into the lake.", "A silky voice murmurs, 'Password?' ", "giant squid", "\nThe door grates on its hinges as it shouts, 'BEGONE'!\n")
 dungeons = Room("Dungeons", "You are in the dungeons. They have obviously not been used or cleaned in a very long time. Slime appears to be oozing from the walls. You are seized by a strong urge to leave to the west.")
 filch = Room("Filch's Office", "You are in a small, spotless room. A filing cabinet stands in the corner and a discontented cat hisses at you from the floor.")
-potions = Room("Potions classroom", "You are in the Potions classroom. Herbs hang from the ceiling. There is a general air of misery.")
+potions = Room("Potions Classroom", "You are in the Potions classroom. Herbs hang from the ceiling. There is a general air of misery.")
 hospital = Room("Hospital", "You are in the hospital wing. The exit is to the south.")
 gates = Room("Castle Gates", "You are inside the Hogwarts main gates. The castle is to the west. You can just make out Hogsmeade down a long path through the gates. The gates are locked.")
 hogspath = Room("Path to Hogsmeade", "To your east is a set of imposing gates. They appear to be locked. You can just make out Hogsmeade at the end of the long path to your west. There is a hole in the ground near your feet.")
-hogstunnelone = Dark("Dark tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
-hogstunneltwo = Dark("Dark tunnel", "You are in a long dark tunnel.", hospital)
-hogstunnelthree = Dark("Dark tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
+hogstunnelone = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
+hogstunneltwo = Dark("Dark Tunnel", "You are in a long dark tunnel.", hospital)
+hogstunnelthree = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
 witch = Password("Entrance to One-Eyed Witch's Passage", "The statue creakily walks a pace towards you to expose a hole in the floor. It seems to be a very dark tunnel.", "You approach the singularly ugly statue, apparently of Gunhilda of Gorsemoor.\nYou have the impression that the statue is waiting for you to say something.\n", "dissendium", "\nThe statue's single eye fixes on you displeasedly.")
 westthirdewcorr = Room("WestThirdEWCorr", "You are at the western end of a third-floor corridor. In a nook in the far western corner is a statue of a one-eyed, humpbacked witch.")
 eastthirdewcorr = Room("EastThirdEWCorr", "You are at the eastern end of a third-floor corridor. There is a closed door in the north wall and a staircase going down.")
@@ -61,6 +63,22 @@ ravenhall = Room("Astronomy Tower Landing", "You are on a landing in the Astrono
 astronomy = Room("Top of Astronomy Tower", "You are out on the roof of the Astronomy Tower. The view is spectacular.")
 ravenclaw = Password("Ravenclaw Common Room", "You are in the Ravenclaw Common Room.", "The eagle-shaped knocker intones, "+riddles[randint(0, len(riddles)-1)][0], riddles[randint(0, len(riddles)-1)][1], "\nThe knocker replies, 'Incorrect!'")
 
+#phonebook = {"The Quad": Room(name, descr, path = {}), 
+ # }
+
+phonebook = {"The Quad": start, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary,
+"East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr,
+"EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr,
+"Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber,
+"NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall,
+"Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr,
+"South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall,
+"Slytherin": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions,
+"Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch,
+"WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall,
+"Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair,
+"Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall,
+"Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw}
 
 
 
@@ -121,7 +139,7 @@ ravenclaw.add_paths({'e': ravenhall})
 quidditch.add_invent(broom)
 quidditch.add_invent(bludger)
 start.add_invent(wand)
-flying.add_invent(snitch)
+gates.add_invent(snitch)
 
 
 
@@ -143,7 +161,7 @@ def go(direction):
 			next.try_to_enter()
 		else:
 			you.location = next
-			print you.location.name + '\n'
+			print you.location.name
 			return you.location.look()
 	else:
 		print "You can't go that way!"
@@ -176,84 +194,122 @@ def where():
 def process(input):
 	words = lexicon.scan(input)
 	sentence = parse.parse_sentence(words)
-	if sentence:
-		subject = sentence.subject
-		verb = sentence.verb
-		object = sentence.object
-		error = sentence.error
-		if error:
-			print error
-		elif 'invent' in verb:
-			return inventory.look()
-		elif 'inventory' in verb:
-			return inventory.look()
-		elif 'look' in verb:
-			return you.location.look()
-		elif 'go' in verb:
-			return go(object)
-		elif 'put' in verb:
-			return inventory.move(object, you.location)
-		elif 'drop' in verb:
-			return inventory.move(object, you.location)
-		elif 'take' in verb:
-			return you.location.move(object, inventory)
-		elif 'get' in verb:
-			return you.location.move(object, inventory)
-		elif 'fly' in verb:
-			return fly()
-		elif 'cast' in verb:
-			spell = spellbook[object].cast()
-			return spell
-		elif 'accio' in verb:
-			return you.location.accio(object)
-		elif 'sort' in verb:
-			return sortingquiz.try_to_enter()
-		elif 'where' in verb:
-			return where()
-		elif 'help' in verb:
-			return help.help()
-		elif 'quit' in verb:
-			save = raw_input("Leave without saving? (y/n)"  )
-			if save == 'y':
-				exit(0)
-			else:
-				pass
-		elif 'save' in verb:
-			if you.name:
-				confirm = raw_input("Save as " + you.name + "? (y/n)  ")
-			else:
-				you.name = raw_input("Save under what name? ")
-				
-		elif 'x' in verb:
-			if object in inventory.invent.keys() or object in you.location.invent.keys():
-				return objectlist[object].examine()
-			else:
-				print "I don't see that here."
-		elif 'parseltongue' in verb:
-			if you.location.name == "Myrtle's Bathroom":
-				print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
-				myrtle.description = myrtle.description + "\nThe sink circle has opened to reveal a dark chute."
-				myrtle.add_paths({'d': chute})
-			else:
-				print "Nothing happens."
+
+	subject = sentence.subject
+	verb = sentence.verb
+	object = sentence.object
+	error = sentence.error
+	if error:
+		print error
+	elif verb == 'invent' or verb == 'inventory':
+		return inventory.look()
+	elif 'inventory' in verb:
+		return inventory.look()
+	elif 'look' in verb:
+		return you.location.look()
+	elif 'go' in verb:
+		return go(object)
+	elif 'put' in verb:
+		return inventory.move(object, you.location)
+	elif 'drop' in verb:
+		return inventory.move(object, you.location)
+	elif 'take' in verb:
+		return you.location.move(object, inventory)
+	elif 'get' in verb:
+		return you.location.move(object, inventory)
+	elif 'fly' in verb:
+		return fly()
+	elif 'cast' in verb:
+		spell = spellbook[object].cast()
+		return spell
+	elif 'accio' in verb:
+		return you.location.accio(object)
+	elif 'sort' in verb:
+		return sortingquiz.try_to_enter()
+	elif 'where' in verb:
+		return where()
+	elif 'help' in verb:
+		return help.help()
+	elif 'quit' in verb:
+		save = raw_input("Leave without saving? (y/n)"  )
+		if save == 'y':
+			exit(0)
 		else:
-			return None
-						
+			pass
+	elif 'save' in verb:
+		if you.name:
+			confirm = raw_input("Save as " + you.name + "? (y/n)  ")
+			confirm = confirm.lower()
+			if confirm == 'y':
+				file = open(you.name.lower()+"_save.py", 'w')
+			else:
+				savename = raw_input("Save under what name? ")
+				file = open(savename.lower()+"_save.py", 'w')
+			file.truncate
+			pickle.dump(you, file)
+			file.close
+		else:
+			you.name = raw_input("Save under what name? ")
+			file = open(you.name.lower()+"_save.py", 'w')
+			file.truncate
+			pickle.dump(you, file)
+			file.close
+	elif 'load' in verb:#
+		namefile = raw_input("What name did you save under? ")
+		file = open(namefile.lower()+"_save.py", 'rb')
+		player = pickle.load(file)
+		you.name = player.name
+		you.location = player.location
+		you.house = player.house
+		you.patronus = player.patronus
+		you.light = player.light
+		you.flying = player.flying
+	elif 'x' in verb:
+		if object in inventory.invent.keys() or object in you.location.invent.keys():
+			return objectlist[object].examine()
+		else:
+			print "I don't see that here."
+	elif 'parseltongue' in verb:
+		if you.location.name == "Myrtle's Bathroom":
+			print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
+			myrtle.description = myrtle.description + "\nThe sink circle has opened to reveal a dark chute."
+			myrtle.add_paths({'d': chute})
+		else:
+			print "Nothing happens."
 	else:
 		return None
-		
-		
-		
-you.location = start					
+					
+
+def find_distance(room, object):
+	dist = 0
+	linked = set([room])
+	accessible_things = set(room.invent.values())
+	while object not in accessible_things:
+		dist += 1
+		temp = set()
+		for chamber in linked:
+			temp.update(chamber.paths.values())
+		linked = linked.union(temp)
+		for chamber in linked:
+			accessible_things.update(chamber.invent.values())
+
+	return dist
+	
+
+				
+
+if __name__ == "__main__":
+
+	x = find_distance(gates, broom)	
+	print x
+	
+						
+you.location = start
+print you.location.name	
 start.look()
 stair_hall.initialize()
-
 	
 while True:
 	input = raw_input("> ")
 	next = process(input)
-
-	
-								
-	
 	
