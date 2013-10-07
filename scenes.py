@@ -32,6 +32,7 @@ class Scene(object):
 				item = self.invent[thing]
 				destination.add_invent(item)
 				self.remove_invent(item)
+				item.location = destination
 			else:
 				print "You're already carrying it!"
 		else:

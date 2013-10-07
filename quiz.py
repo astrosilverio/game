@@ -106,7 +106,7 @@ class SortingQuiz(object):
 		you.name = name
 		you.patronus = patronus
 		
-		you.location.look()
+#		you.location.look()
 
 
 		
