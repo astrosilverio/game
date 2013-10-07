@@ -127,6 +127,19 @@ def take(thing):
 	else:
 		print "You can't take that."
 		
+def eat(thing):
+	if objectlist[thing].edible == True:	
+		if thing in inventory.invent.keys():
+			print objectlist[thing].taste
+			return inventory.move(thing, phonebook[objectlist[thing].home])
+		elif thing in phonebook[you.location].invent.keys():		
+			print objectlist[thing].taste
+			return phonebook[you.location].move(thing, phonebook[objectlist[thing].home])
+		else:
+			print "I don't see what you want me to eat."	
+	else:
+		print "I can't eat that!"
+		
 def cast(incantation):
 	if "wand" in inventory.invent.keys():
 		spell = spellbook[incantation].cast()
