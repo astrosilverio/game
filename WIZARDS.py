@@ -1,7 +1,7 @@
 import scenes
-
-from rooms import *
 import things
+from rooms import *
+
 from spells import *
 from riddles import *
 from thesaurus import *
@@ -15,14 +15,14 @@ you = scenes.Player()
 
 object_list = things.create_things()
 
-quidditch.add_invent(broom)
-quidditch.add_invent(bludger)
-start.add_invent(wand)
-flying.add_invent(snitch)
-disusedroom.add_invent(mirror)
-kitchens.add_invent(food)
-nwgreathall.add_invent(candy)
-chamber.add_invent(bones)
+quidditch.add_invent(objectlist['broom'])
+quidditch.add_invent(objectlist['bludger'])
+start.add_invent(objectlist['wand'])
+flying.add_invent(objectlist['snitch'])
+disusedroom.add_invent(objectlist['mirror'])
+kitchens.add_invent(objectlist['food'])
+nwgreathall.add_invent(objectlist['candy'])
+chamber.add_invent(objectlist['bones'])
 
 you.location = 'The Quad'
 print phonebook[you.location].name	
