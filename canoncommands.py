@@ -64,7 +64,7 @@ def look(args):
 	return phonebook[you.location].look()
 	
 def sort(args):
-	return sortingquiz.try_to_enter()
+	return sortingquiz.try_to_enter(you)
 
 def help(args):
 	print helpstatement
