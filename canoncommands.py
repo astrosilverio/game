@@ -1,9 +1,10 @@
 from bin.dictionary import *
 from rooms import *
-from things import *
 from bin.help import *
 from spells import *
 import pickle
+
+#suggest wrapping all these in an object
 
 def go(direction):
 #	if direction not in directions
@@ -33,7 +34,7 @@ def fly(args):
 
 	you.flying = True
 
-	if "broom" in you.invent.keys():
+	if "broom" in you.invent:
 		print "You are flying! Everything looks different up here."
 	else:
 		print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
@@ -42,7 +43,7 @@ def fly(args):
 		return flying.look()
 	else:
 		pass
-	if "bludger" in phonebook[you.location].invent.keys():
+	if "bludger" in phonebook[you.location].invent:
 		print "An unsecured bludger clocks you in the head. You come to your senses painfully and your vision clears slowly.\n"
 		you.flying = False
 		you.location = "Hospital"
@@ -130,10 +131,10 @@ def take(thing):
 		
 def eat(thing):
 	if objectlist[thing].edible == True:	
-		if thing in you.invent.keys():
+		if thing in you.invent:
 			print objectlist[thing].taste
 			return you.move(thing, phonebook[objectlist[thing].home])
-		elif thing in phonebook[you.location].invent.keys():		
+		elif thing in phonebook[you.location].invent:
 			print objectlist[thing].taste
 			if you.location != objectlist[thing].home:
 				return phonebook[you.location].move(thing, phonebook[objectlist[thing].home])
@@ -145,9 +146,10 @@ def eat(thing):
 		print "I can't eat that!"
 		
 def cast(incantation):
-	if "wand" in you.invent.keys():
-		spell = spellbook[incantation].cast()
-		return spell
+	if "wand" in you.invent:
+		spellbook = Spells(you)
+		spell = getattr(spellbook, incantation)
+		spell()
 	else:
 		print "You need your wand to cast spells!"
 
@@ -175,9 +177,9 @@ def locate_object(thing):
 	
 	
 def accio(thing):
-	if 'wand' in you.invent.keys():
+	if 'wand' in you.invent:
 		if objectlist[thing].grabbable == True:
-			if thing in you.invent.values():
+			if thing in you.invent:
 				print "You already have that!"
 			else:
 				dist = find_distance(phonebook[you.location], objectlist[thing])
@@ -194,8 +196,9 @@ def accio(thing):
 
 
 def x(thing):
-	if thing in you.invent.keys() or thing in phonebook[you.location].invent.keys():
+	if thing in you.invent or thing in phonebook[you.location].invent:
 		return objectlist[thing].examine()
 	else:
 		print "I don't see that here."		
 
+canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'info': info, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}

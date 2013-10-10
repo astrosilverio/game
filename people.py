@@ -1,10 +1,3 @@
-from things import *
-from rooms import *
-from bin import lexicon
-from bin import parse
-from random import randint
-
-
 class Person(object):
 
 	def __init__(self, name):

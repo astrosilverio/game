@@ -1,7 +1,7 @@
-from scenes import *
-from quiz import *
+import scenes
+
 from rooms import *
-from things import *
+import things
 from spells import *
 from riddles import *
 from thesaurus import *
@@ -9,6 +9,11 @@ from random import randint
 import pickle
 import pdb
 
+inventory = scenes.Inventory()
+death = scenes.Death()
+you = scenes.Player()
+
+object_list = things.create_things()
 
 quidditch.add_invent(broom)
 quidditch.add_invent(bludger)
@@ -19,18 +24,6 @@ kitchens.add_invent(food)
 nwgreathall.add_invent(candy)
 chamber.add_invent(bones)
 
-broom.location = quidditch
-bludger.location = quidditch
-wand.location = start
-snitch.location = flying
-mirror.location = disusedroom
-food.location = kitchens
-candy.location = nwgreathall
-bones.location = chamber
-
-
-
-						
 you.location = 'The Quad'
 print phonebook[you.location].name	
 phonebook[you.location].look()

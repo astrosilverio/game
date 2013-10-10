@@ -1,41 +1,39 @@
 from scenes import *
-from random import randint
+from random import choice
 from quiz import *
 from riddles import *
 
 class Room(Scene):
 
-	def __init__(self, name, description):
+	def __init__(self, name, description, dark=False, dark_wakeup=None, stairrooms=None):
 		self.name = name
 		self.description = description
 		self.paths = {}
 		self.invent = {}
 		self.people = []
 		self.stairrooms = []
+		self.dark = dark
+		self.dark_wakeup = dark_wakeup
+		self.stairrooms = stairrooms
 		
 	def add_paths(self, paths):
 		self.paths.update(paths)
 		
 	def look(self):
-		output = self.description + '\n\n'
-		for name, thing in self.invent.items():
-			output = output + thing.description + '\n'
-		print output
-				
+		if self.stairrooms:
+			self.shuffle_stairs()
 
-class Dark(Room):
+		if self.dark:
+			self.look_darkly
+		else:
+			output = self.description + '\n\n'
+			for name, thing in self.invent.items():
+				output = output + thing.description + '\n'
+			print output
 
-	def __init__(self, name, description, out):
-		self.name = name
-		self.description = description
-		self.paths = {}
-		self.invent = {}
-		self.people = []
-		self.out = out
-
-	def look(self):
+	def look_darkly(self):
 		print self.description + '\n'
-		
+
 		if you.light == True:
 			print "You can see by the faint blue light of your wand."
 			for name, thing in self.invent.items():
@@ -44,34 +42,15 @@ class Dark(Room):
 			print "You can't see a thing. You might fall in a hole."
 			num = randint(0,1)
 			if num == 0:
-				print "\nYou seem to have been bitten by a bowtruckle. You pass out and wake up in the hospital wing."
-				you.location = self.out.name
+				print "\nYou seem to have been bitten by a bowtruckle. You pass out and wake up %s." % self.dark_wakeup.name
+				you.location = self.dark_wakeup.name
 				print you.location.name
 				phonebook[you.location].look()
 			else:
-				pass		
-		
-					
-class StairHall(Room):
+				pass						
 
-	def __init__(self, name, description, stairrooms):
-		self.name = name
-		self.description = description
-		self.paths = {}
-		self.invent = {}
-		self.people = []
-		self.stairrooms = stairrooms
-
-	def look(self):
-		self.initialize()
-		print self.description + '\n'
-		for name, thing in self.invent.items():
-			print thing.description
-
-	def initialize(self):
-		number = randint(0,len(self.stairrooms)-1)
-		self.add_paths({'u': self.stairrooms[number]})
-
+	def shuffle_stairs(self):
+		self.add_paths({'u': choice(self.stairrooms)})
 
 		
 class Password(Room):
@@ -108,14 +87,12 @@ class GreatHall(Room):
 		self.paths = {}
 		self.invent = {}
 		self.people = {}
-		self.count = -1
 		self.otherplace = otherplace
+		self.first_time_here = True
 		
 	def look(self):
-		
-		self.count = self.count + 1
-		
-		if you.house == '':
+		if self.first_time_here
+			self.first_time_here = False
 			self.otherplace.try_to_enter()
 		else:
 			print self.description + '\n'
@@ -159,9 +136,9 @@ potions = Room("Potions Classroom", "You are in the Potions classroom. Herbs han
 hospital = Room("Hospital", "You are in the hospital wing. The exit is to the south.")
 gates = Room("Castle Gates", "You are inside the Hogwarts main gates. The castle is to the west. You can just make out Hogsmeade down a long path through the gates. The gates are locked.")
 hogspath = Room("Path to Hogsmeade", "To your east is a set of imposing gates. They appear to be locked. You can just make out Hogsmeade at the end of the long path to your west. There is a hole in the ground near your feet.")
-hogstunnelone = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
-hogstunneltwo = Dark("Dark Tunnel", "You are in a long dark tunnel.", hospital)
-hogstunnelthree = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", hospital)
+hogstunnelone = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
+hogstunneltwo = Dark("Dark Tunnel", "You are in a long dark tunnel.", dark=True, dark_wakeup=hospital)
+hogstunnelthree = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
 witch = Password("Entrance to the One-Eyed Witch's Passage", "The statue creakily walks a pace towards you to expose a hole in the floor. It seems to be a very dark tunnel.", "You approach the singularly ugly statue, apparently of Gunhilda of Gorsemoor.\nYou have the impression that the statue is waiting for you to say something.\n", "dissendium", "\nThe statue's single eye fixes on you displeasedly.")
 westthirdewcorr = Room("WestThirdEWCorr", "You are at the western end of a third-floor corridor. In a nook in the far western corner is a statue of a one-eyed, humpbacked witch.")
 eastthirdewcorr = Room("EastThirdEWCorr", "You are at the eastern end of a third-floor corridor. There is a closed door in the north wall and a staircase going down.")
@@ -176,7 +153,7 @@ ravenhall = Room("Astronomy Tower Landing", "You are on a landing in the Astrono
 astronomy = Room("Top of Astronomy Tower", "You are out on the roof of the Astronomy Tower. The view is spectacular.")
 ravenclaw = Password("Ravenclaw Common Room", "You are in the Ravenclaw Common Room.", "The eagle-shaped knocker intones, "+riddles[randint(0, len(riddles)-1)][0], riddles[randint(0, len(riddles)-1)][1], "\nThe knocker replies, 'Incorrect!'")
 stairrooms = [westsecondewcorr, westlibrary, southsecondnscorr]
-stair_hall = StairHall("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms)
+stair_hall = StairHall("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms=stairrooms)
 
 #phonebook = {"The Quad": Room(name, descr, path = {}), 
  # }
