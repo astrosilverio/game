@@ -1,6 +1,6 @@
 import scenes
 import things
-from rooms import *
+import rooms # not finished
 
 import thesaurus
 from random import randint
@@ -11,6 +11,8 @@ death = scenes.Death()
 you = scenes.Player()
 
 object_list = things.make_things()
+phonebook = rooms.make_rooms()
+rooms.make_paths()
 
 quidditch.add_invent(objectlist['broom'])
 quidditch.add_invent(objectlist['bludger'])
