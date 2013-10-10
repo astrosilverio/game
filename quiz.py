@@ -1,6 +1,4 @@
-from scenes import *
 from random import shuffle, randint
-
 
 quiz = [("Which door do you try to open?",
 		[("Lion", "The banged-up door with mysterious creaks and clanks coming from it"),
@@ -27,16 +25,14 @@ quiz = [("Which door do you try to open?",
 		("Eagle", "Sparkling wisdom froth"),
 		("Badger", "Plain hot chocolate"),
 		("Snake", "Thick black ooze that lets you read minds")])]
-		
-		
+				
 class SortingQuiz(object):
 
 	def __init__(self, questions):
 		self.questions = questions
 		self.answers = []
 
-
-	def try_to_enter(self):
+	def try_to_enter(self, you):
 		
 		print "::insert sorting song here:: Let's get you sorted!"
 		for q in self.questions:
