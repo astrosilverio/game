@@ -13,7 +13,7 @@ inventory = scenes.Inventory()
 death = scenes.Death()
 you = scenes.Player()
 
-object_list = things.create_things()
+object_list = things.make_things()
 
 quidditch.add_invent(objectlist['broom'])
 quidditch.add_invent(objectlist['bludger'])
