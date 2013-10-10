@@ -4,6 +4,9 @@ from bin.help import *
 from spells import *
 import pickle
 
+import things
+objectlist = things.make_things()
+
 #suggest wrapping all these in an object
 
 def go(direction):
@@ -52,8 +55,7 @@ def fly(args):
 		
 		
 def where(args):
-	print "You are in " + you.location
-	
+	print "You are in " + you.location	
 	
 def invent(args):
 	return you.look()
