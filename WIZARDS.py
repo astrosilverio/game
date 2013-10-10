@@ -2,14 +2,11 @@ import scenes
 import things
 from rooms import *
 
-from spells import *
-from riddles import *
-from thesaurus import *
+import thesaurus
 from random import randint
 import pickle
 import pdb
 
-inventory = scenes.Inventory()
 death = scenes.Death()
 you = scenes.Player()
 
@@ -31,5 +28,5 @@ stair_hall.initialize()
 	
 while True:
 	input = raw_input("> ")
-	next = process(input)
+	next = thesaurus.process(input)
 	
