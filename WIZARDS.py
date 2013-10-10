@@ -1,7 +1,7 @@
 import scenes
 
 from rooms import *
-from things import *
+import things
 from spells import *
 from riddles import *
 from thesaurus import *
@@ -13,6 +13,7 @@ inventory = scenes.Inventory()
 death = scenes.Death()
 you = scenes.Player()
 
+object_list = things.create_things()
 
 quidditch.add_invent(broom)
 quidditch.add_invent(bludger)

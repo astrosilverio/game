@@ -1,6 +1,5 @@
 from bin.dictionary import *
 from rooms import *
-from things import *
 from bin.help import *
 from spells import *
 import pickle
