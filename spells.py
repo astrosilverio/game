@@ -9,7 +9,7 @@ class Spell(object):
 class Patronus(Spell):
 
 	def cast(self):
-		if 'wand' in inventory.invent.keys():
+		if 'wand' in you.invent.keys():
 			patronuses = ["octopus", "cup of tea", "chameleon", "bear", "stag", "badger", "fox", "elephant", "mosquito"]
 			temp = randint(0, len(patronuses)-1)
 			you.patronus = patronuses[temp]
@@ -23,7 +23,7 @@ class Patronus(Spell):
 class Lumos(Spell):
 
 	def cast(self):
-		if 'wand' in inventory.invent.keys():
+		if 'wand' in you.invent.keys():
 			if you.light == False:
 				print "The tip of your wand glows bright blue!"
 				you.light = True
@@ -35,7 +35,7 @@ class Lumos(Spell):
 class Nox(Spell):
 
 	def cast(self):
-		if 'wand' in inventory.invent.keys():
+		if 'wand' in you.invent.keys():
 			if you.light == True:
 				print "The glowing point of light at the tip of your wand winks out."
 				you.light = False

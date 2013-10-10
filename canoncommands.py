@@ -5,9 +5,6 @@ from bin.help import *
 from spells import *
 import pickle
 
-start.add_invent(wand)
-quidditch.add_invent(broom)
-
 def go(direction):
 #	if direction not in directions
 	next = phonebook.get(you.location, None).paths.get(direction, None)
@@ -36,7 +33,7 @@ def fly(args):
 
 	you.flying = True
 
-	if "broom" in inventory.invent.keys():
+	if "broom" in you.invent.keys():
 		print "You are flying! Everything looks different up here."
 	else:
 		print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
@@ -58,7 +55,7 @@ def where(args):
 	
 	
 def invent(args):
-	return inventory.look()
+	return you.look()
 		
 def look(args):
 	return phonebook[you.location].look()
@@ -106,6 +103,7 @@ def load(args):
 	you.patronus = player.patronus
 	you.light = player.light
 	you.flying = player.flying
+	you.invent = player.invent
 	
 def speak_parseltongue(args):
 	if you.location == "Myrtle's Bathroom":
@@ -117,31 +115,37 @@ def speak_parseltongue(args):
 	else:
 		print "Nothing happens."	
 		
+def info(args):
+	return you.info()
+		
 	
 def drop(thing):
-	return inventory.move(thing, phonebook[you.location])
+	return you.move(thing, phonebook[you.location])
 	
 def take(thing):
 	if objectlist[thing].grabbable == True:
-		return phonebook[you.location].move(thing, inventory)
+		return phonebook[you.location].move(thing, you)
 	else:
 		print "You can't take that."
 		
 def eat(thing):
 	if objectlist[thing].edible == True:	
-		if thing in inventory.invent.keys():
+		if thing in you.invent.keys():
 			print objectlist[thing].taste
-			return inventory.move(thing, phonebook[objectlist[thing].home])
+			return you.move(thing, phonebook[objectlist[thing].home])
 		elif thing in phonebook[you.location].invent.keys():		
 			print objectlist[thing].taste
-			return phonebook[you.location].move(thing, phonebook[objectlist[thing].home])
+			if you.location != objectlist[thing].home:
+				return phonebook[you.location].move(thing, phonebook[objectlist[thing].home])
+			else:
+				pass
 		else:
 			print "I don't see what you want me to eat."	
 	else:
 		print "I can't eat that!"
 		
 def cast(incantation):
-	if "wand" in inventory.invent.keys():
+	if "wand" in you.invent.keys():
 		spell = spellbook[incantation].cast()
 		return spell
 	else:
@@ -171,23 +175,26 @@ def locate_object(thing):
 	
 	
 def accio(thing):
-	if 'wand' in inventory.invent.keys():
-		if thing in inventory.invent.values():
-			print "You already have that!"
-		else:
-			dist = find_distance(phonebook[you.location], objectlist[thing])
-			if dist <= 3:
-				thing_location = locate_object(objectlist[thing])[0]
-				print "The %s flies toward you alarmingly quickly." % thing
-				return thing_location.move(thing, inventory)
+	if 'wand' in you.invent.keys():
+		if objectlist[thing].grabbable == True:
+			if thing in you.invent.values():
+				print "You already have that!"
 			else:
-				print "You try and try, but are not strong enough to summon the %s." % thing
+				dist = find_distance(phonebook[you.location], objectlist[thing])
+				if dist <= 3:
+					thing_location = locate_object(objectlist[thing])[0]
+					print "The %s flies toward you alarmingly quickly." % thing
+					return thing_location.move(thing, you)
+				else:
+					print "You try and try, but are not strong enough to summon the %s." % thing
+		else:
+			print "You're not strong enough to move that."
 	else:
 		print "You can't cast spells without your wand!"
 
 
 def x(thing):
-	if thing in inventory.invent.keys() or thing in phonebook[you.location].invent.keys():
+	if thing in you.invent.keys() or thing in phonebook[you.location].invent.keys():
 		return objectlist[thing].examine()
 	else:
 		print "I don't see that here."		

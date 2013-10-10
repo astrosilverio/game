@@ -6,15 +6,7 @@ quips = ["""You are knocked out. When you come to, you are a silvery misty versi
 			"""You are dead. Sucks to be you.""",
 			"""You are sent to Smeltings. Sorry."""]
 					
-class Player(object):
 
-	def __init__(self):
-		self.name = ''
-		self.house = ''
-		self.patronus = ''
-		self.flying = False
-		self.light = False
-					
 class Scene(object):
 
 	def __init__(self):
@@ -41,16 +33,35 @@ class Scene(object):
 class Inventory(Scene):
 
 	def look(self):
+		print "You are carrying:"
 		for name, thing in self.invent.items():
 			print thing.name
+			
+class Player(Inventory):
+
+	def __init__(self):
+		self.name = ''
+		self.house = ''
+		self.patronus = ''
+		self.flying = False
+		self.light = False
+		self.invent = {}
+	
+	def info(self):
+		if self.name:
+			print "Your name is %s." % self.name
+		if self.house:
+			print "You are in %s House!" % self.house
+		if self.patronus:
+			print "Your patronus is a %s." % self.patronus
+					
 						
 class Death(object):
 	
 	def look(self):
 		print quips[randint(0,len(quips)-1)]		
 		exit(1)
-		
-		
+
 inventory = Inventory()
 death = Death()
 you = Player()

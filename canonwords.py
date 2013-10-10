@@ -18,5 +18,5 @@ noncanons = {'north': 'n', 'south': 's', 'west': 'w', 'east': 'e', 'northwest': 
 for key in noncanons:
 	noncanonicals[key] = noncanons[key]
 			
-canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}
+canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'info': info, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}
 

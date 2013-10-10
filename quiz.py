@@ -63,11 +63,11 @@ class SortingQuiz(object):
 		counts = [self.answers.count('Lion'), self.answers.count('Eagle'), self.answers.count('Badger'), self.answers.count('Snake')]
 		houses = ['Lion', 'Eagle', 'Badger', 'Snake']
 		if counts.count(max(counts)) > 1:
-			print """You're a hatstall! What house do you want to be in?
+			print """You're a hatstall! You had %d Lion responses, %d Eagle responses, %d Badger responses, and %d Snake responses. What house do you want to be in?
 					a. Lion
 					b. Eagle
 					c. Badger
-					d. Snake"""
+					d. Snake""" % (counts[0], counts[1], counts[2], counts[3])
 			run = 1
 			while run:
 				a = raw_input("(pick one!) ")
