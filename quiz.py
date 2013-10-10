@@ -1,6 +1,5 @@
 from scenes import *
-from random import shuffle
-from random import randint
+from random import shuffle, randint
 
 
 quiz = [("Which door do you try to open?",
