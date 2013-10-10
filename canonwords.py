@@ -3,10 +3,10 @@ from bin.dictionary import *
 from canoncommands import *
 
 canonwords = []
-[canonwords.append(direction) for direction in directions]
-[canonwords.append(noun) for noun in nouns]
-[canonwords.append(person) for person in people]
-[canonwords.append(spell) for spell in spells]
+canonwords.extend(direction)
+canonwords.extend(noun)
+canonwords.extend(person)
+canonwords.extend(spell)
 
 noncanonicals = dict()
 
