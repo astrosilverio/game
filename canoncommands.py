@@ -4,6 +4,8 @@ from bin.help import *
 from spells import *
 import pickle
 
+#suggest wrapping all these in an object
+
 def go(direction):
 #	if direction not in directions
 	next = phonebook.get(you.location, None).paths.get(direction, None)
@@ -199,3 +201,4 @@ def x(thing):
 	else:
 		print "I don't see that here."		
 
+canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'info': info, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}
