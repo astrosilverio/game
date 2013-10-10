@@ -145,8 +145,9 @@ def eat(thing):
 		
 def cast(incantation):
 	if "wand" in you.invent:
-		spell = spellbook[incantation].cast()
-		return spell
+		spellbook = Spells(you)
+		spell = getattr(spellbook, incantation)
+		spell()
 	else:
 		print "You need your wand to cast spells!"
 

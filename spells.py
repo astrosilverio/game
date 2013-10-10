@@ -1,55 +1,30 @@
 from scenes import * 
-from random import randint
+from random import choice
 
-class Spell(object):
+class Spells(object):
 
-	def __init__(self, name):
+	def __init__(self, player):
 		self.name = name
-		
-class Patronus(Spell):
+		self.you = player
 
-	def cast(self):
-		if 'wand' in you.invent.keys():
-			patronuses = ["octopus", "cup of tea", "chameleon", "bear", "stag", "badger", "fox", "elephant", "mosquito"]
-			temp = randint(0, len(patronuses)-1)
-			you.patronus = patronuses[temp]
-			if you.patronus:	
-				print "A silvery " + you.patronus + " jumps from the end of your wand and scurries around before disappearing!"
-			else:
-				print "You can't cast that yet!"
+	def patronus(self):
+		patronuses = ["octopus", "cup of tea", "chameleon", "bear", "stag", "badger", "fox", "elephant", "mosquito"]
+		self.you.patronus = choice(patronuses)
+		if self.you.patronus:	
+			print "A silvery " + self.you.patronus + " jumps from the end of self.your wand and scurries around before disappearing!"
 		else:
-			print "You need your wand to cast spells!"	
-			
-class Lumos(Spell):
+			print "You can't cast that yet!"
 
-	def cast(self):
-		if 'wand' in you.invent.keys():
-			if you.light == False:
-				print "The tip of your wand glows bright blue!"
-				you.light = True
-			else:
-				pass
+	def lumos(self):
+		if self.you.light == False:
+			print "The tip of self.your wand glows bright blue!"
+			self.you.light = True
 		else:
-			print "You need your wand to cast spells!"
-			
-class Nox(Spell):
+			pass
 
-	def cast(self):
-		if 'wand' in you.invent.keys():
-			if you.light == True:
-				print "The glowing point of light at the tip of your wand winks out."
-				you.light = False
-			else:
-				pass
+	def nox(self):
+		if self.you.light == True:
+			print "The glowing point of light at the tip of self.your wand winks out."
+			self.you.light = False
 		else:
-			print "You need your wand to cast spells!"	
-
-
-			
-expectopatronum = Patronus('patronum')
-lumos = Lumos('lumos')
-nox = Nox('nox')
-
-spellbook = {'patronum': expectopatronum, 'lumos': lumos, 'nox': nox}
-
-
+			pass		
