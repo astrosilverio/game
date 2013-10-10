@@ -1,5 +1,5 @@
-from scenes import *
-from quiz import *
+import scenes
+
 from rooms import *
 from things import *
 from spells import *
@@ -8,6 +8,10 @@ from thesaurus import *
 from random import randint
 import pickle
 import pdb
+
+inventory = scenes.Inventory()
+death = scenes.Death()
+you = scenes.Player()
 
 
 quidditch.add_invent(broom)

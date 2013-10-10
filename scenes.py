@@ -62,7 +62,4 @@ class Death(object):
 		print quips[randint(0,len(quips)-1)]		
 		exit(1)
 
-inventory = Inventory()
-death = Death()
-you = Player()
 		
