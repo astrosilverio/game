@@ -30,14 +30,7 @@ class Scene(object):
 		else:
 			print "I don't see that here."
 
-class Inventory(Scene):
-
-	def look(self):
-		print "You are carrying:"
-		for name, thing in self.invent.items():
-			print thing.name
-			
-class Player(Inventory):
+class Player(Scene):
 
 	def __init__(self):
 		self.name = ''
@@ -46,6 +39,12 @@ class Player(Inventory):
 		self.flying = False
 		self.light = False
 		self.invent = {}
+
+	def look(self):
+		print "You are carrying:"
+		for name, thing in self.invent.items():
+			print thing.name
+
 	
 	def info(self):
 		if self.name:
