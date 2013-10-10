@@ -24,18 +24,6 @@ kitchens.add_invent(food)
 nwgreathall.add_invent(candy)
 chamber.add_invent(bones)
 
-broom.location = quidditch
-bludger.location = quidditch
-wand.location = start
-snitch.location = flying
-mirror.location = disusedroom
-food.location = kitchens
-candy.location = nwgreathall
-bones.location = chamber
-
-
-
-						
 you.location = 'The Quad'
 print phonebook[you.location].name	
 phonebook[you.location].look()
