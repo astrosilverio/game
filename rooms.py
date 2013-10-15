@@ -12,40 +12,40 @@ quips = ["""You are knocked out. When you come to, you are a silvery misty versi
 class Scene(object):
 
 	def __init__(self):
-		self.invent = {}
+		self.invent = []
 		
 	def add_invent(self, stuff):
-		self.invent.update({stuff.name: stuff})
+		self.invent.append(stuff)
+# 		self.invent.update({stuff.name: stuff})
 		
 	def remove_invent(self, stuff):
-		del self.invent[stuff.name]
+		i = self.invent.index(stuff)
+		del self.invent[i]
 			
 	def move(self, thing, destination):
-		if thing in self.invent.keys():
-			if thing not in destination.invent.keys():
-				item = self.invent[thing]
-				destination.add_invent(item)
-				self.remove_invent(item)
-				item.location = destination
+		if thing in self.invent:
+			if thing not in destination.invent:
+				destination.add_invent(thing)
+				self.remove_invent(thing)
 			else:
-				print "You're already carrying it!"
+				print "That is already in %s's inventory." % destination.name
 		else:
 			print "I don't see that here."
 
 class Player(Scene):
 
 	def __init__(self):
-		self.name = ''
+		self.name = 'Player 1'
 		self.house = ''
 		self.patronus = ''
 		self.flying = False
 		self.light = False
-		self.invent = {}
+		self.invent = []
 
 	def look(self):
 		print "You are carrying:"
-		for name, thing in self.invent.items():
-			print thing.name
+		for thing in self.invent:
+			print thing
 	
 	def info(self):
 		if self.name:
@@ -117,7 +117,7 @@ class Player(Scene):
 			print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
 		if self.location == "Quidditch Pitch":
 			self.location = "Flying"
-			return phonebook["Flying"].look()
+			return phonebook["Flying"].look(self)
 		else:
 			pass
 		if "bludger" in phonebook[self.location].invent:
@@ -125,7 +125,7 @@ class Player(Scene):
 			self.flying = False
 			self.location = "Hospital"
 			print self.location
-			return phonebook[self.location].look()
+			return phonebook[self.location].look(self)
 																	
 class Death(object):
 	
@@ -140,7 +140,7 @@ class Room(Scene):
 		self.name = name
 		self.description = description
 		self.paths = {}
-		self.invent = {}
+		self.invent = []
 		self.people = []
 		self.stairrooms = []
 		self.dark = dark
@@ -169,8 +169,8 @@ class Room(Scene):
 
 			if proceed == True:
 				output = self.description + '\n\n'
-				for name, thing in self.invent.items():
-					output = output + thing.description + '\n'
+				for thing in self.invent:
+					output = output + objectlist[thing].description + '\n'
 				print output
 
 	def look_darkly(self, player):
@@ -178,8 +178,8 @@ class Room(Scene):
 
 		if player.light == True:
 			print "You can see by the faint blue light of your wand."
-			for name, thing in self.invent.items():
-				print thing.description
+			for thing in self.invent:
+				print objectlist[thing].description
 		else:
 			print "You can't see a thing. You might fall in a hole."
 			num = randint(0,1)
@@ -210,7 +210,7 @@ class GreatHall(Room):
 		self.name = name
 		self.description = description
 		self.paths = {}
-		self.invent = {}
+		self.invent = []
 		self.people = {}
 		self.first_time_here = True
 		
@@ -220,8 +220,8 @@ class GreatHall(Room):
 			sortingquiz.try_to_enter()
 		else:
 			print self.description + '\n'
-			for name, thing in self.invent.items():
-				print thing.description
+			for thing in self.invent:
+				print objectlist[thing].description
 				
 		
 def make_rooms_from_json():
@@ -234,15 +234,4 @@ def make_rooms_from_json():
 	return phonebook
 	
 phonebook = make_rooms_from_json()
-
-
-# phonebook["Quidditch Pitch"].add_invent(objectlist['broom'])
-# phonebook["Quidditch Pitch"].add_invent(objectlist['bludger'])
-# phonebook["The Quad"].add_invent(objectlist['wand'])
-# phonebook["Flying"].add_invent(objectlist['snitch'])
-# phonebook["Disused Room"].add_invent(objectlist['mirror'])
-# phonebook["Kitchen"].add_invent(objectlist['food'])
-# phonebook["NWGreatHall"].add_invent(objectlist['candy'])
-# phonebook["Chamber of Secrets"].add_invent(objectlist['bones'])
-	
 

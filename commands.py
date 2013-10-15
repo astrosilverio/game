@@ -103,17 +103,19 @@ class Commands(object):
 			dist = 0
 			location = None
 			linked = set([room])
-			accessible_things = set(room.invent.values())
+			accessible_things = set(room.invent)
 			while object not in accessible_things and dist <= 4:
 				dist += 1
 				temp = set()
 				for chamber in linked:
-					temp.update(chamber.paths.values())
+					tempstrings = chamber.paths.values()
+					tempobjects = [phonebook[string] for string in tempstrings]
+					temp.update(tempobjects)
 				linked = linked.union(temp)
 				for chamber in linked:
-					if object in chamber.invent.values():
+					if object in chamber.invent:
 						location = chamber
-					accessible_things.update(chamber.invent.values())
+					accessible_things.update(chamber.invent)
 			return dist, location
 	
 		if 'wand' in player.invent:
@@ -121,7 +123,7 @@ class Commands(object):
 				if thing in player.invent:
 					print "You already have that!"
 				else:
-					dist, thing_location = find_distance(phonebook[player.location], objectlist[thing])
+					dist, thing_location = find_distance(phonebook[player.location], thing)
 					if dist <= 3:
 						print "The %s flies toward you alarmingly quickly." % thing
 						return thing_location.move(thing, player)

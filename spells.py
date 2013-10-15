@@ -16,14 +16,14 @@ class Spells(object):
 
 	def lumos(self):
 		if self.you.light == False:
-			print "The tip of self.your wand glows bright blue!"
+			print "The tip of your wand glows bright blue!"
 			self.you.light = True
 		else:
 			pass
 
 	def nox(self):
 		if self.you.light == True:
-			print "The glowing point of light at the tip of self.your wand winks out."
+			print "The glowing point of light at the tip of your wand winks out."
 			self.you.light = False
 		else:
 			pass		

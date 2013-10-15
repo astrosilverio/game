@@ -49,4 +49,7 @@ def make_things():
 
 	return {'broom': broom, 'bludger': bludger, 'wand': wand, 'snitch': snitch, 'candy': candy, 'food': food, 'mirror': mirror, 'bones': bones}
 
+
+
+#change name to not list
 objectlist = make_things()
