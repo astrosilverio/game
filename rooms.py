@@ -18,7 +18,7 @@ class Room(Scene):
 		
 	def add_paths(self, paths):
 		self.paths.update(paths)
-		
+
 	def look(self):
 		if self.stairrooms:
 			self.shuffle_stairs()
@@ -91,7 +91,7 @@ class GreatHall(Room):
 		self.first_time_here = True
 		
 	def look(self):
-		if self.first_time_here
+		if self.first_time_here:
 			self.first_time_here = False
 			self.otherplace.try_to_enter()
 		else:
@@ -136,9 +136,9 @@ def make_rooms():
 	hospital = Room("Hospital", "You are in the hospital wing. The exit is to the south.")
 	gates = Room("Castle Gates", "You are inside the Hogwarts main gates. The castle is to the west. You can just make out Hogsmeade down a long path through the gates. The gates are locked.")
 	hogspath = Room("Path to Hogsmeade", "To your east is a set of imposing gates. They appear to be locked. You can just make out Hogsmeade at the end of the long path to your west. There is a hole in the ground near your feet.")
-	hogstunnelone = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
-	hogstunneltwo = Dark("Dark Tunnel", "You are in a long dark tunnel.", dark=True, dark_wakeup=hospital)
-	hogstunnelthree = Dark("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
+	hogstunnelone = Room("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
+	hogstunneltwo = Room("Dark Tunnel", "You are in a long dark tunnel.", dark=True, dark_wakeup=hospital)
+	hogstunnelthree = Room("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
 	witch = Password("Entrance to the One-Eyed Witch's Passage", "The statue creakily walks a pace towards you to expose a hole in the floor. It seems to be a very dark tunnel.", "You approach the singularly ugly statue, apparently of Gunhilda of Gorsemoor.\nYou have the impression that the statue is waiting for you to say something.\n", "dissendium", "\nThe statue's single eye fixes on you displeasedly.")
 	westthirdewcorr = Room("WestThirdEWCorr", "You are at the western end of a third-floor corridor. In a nook in the far western corner is a statue of a one-eyed, humpbacked witch.")
 	eastthirdewcorr = Room("EastThirdEWCorr", "You are at the eastern end of a third-floor corridor. There is a closed door in the north wall and a staircase going down.")
@@ -153,60 +153,11 @@ def make_rooms():
 	astronomy = Room("Top of Astronomy Tower", "You are out on the roof of the Astronomy Tower. The view is spectacular.")
 	ravenclaw = Password("Ravenclaw Common Room", "You are in the Ravenclaw Common Room.", "The eagle-shaped knocker intones, "+riddles[randint(0, len(riddles)-1)][0], riddles[randint(0, len(riddles)-1)][1], "\nThe knocker replies, 'Incorrect!'")
 	stairrooms = [westsecondewcorr, westlibrary, southsecondnscorr]
-	stair_hall = StairHall("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms=stairrooms)
+	stair_hall = Room("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms=stairrooms)
 
-	return	phonebook = {"The Quad": start, 
-	"Stair Hall": stair_hall, 
-	"Quidditch Pitch": quidditch,
-	"Flying": flying,
-	"West Library": westlibrary,
-	"East Library": eastlibrary,
-	"WestSecondEWCorr": westsecondewcorr,
-	"CentralSecondEWCorr": centralsecondewcorr,
-	"EastSecondEWCorr": eastsecondewcorr,
-	"SouthSecondNSCorr": southsecondnscorr,
-	"NorthSecondNSCorr": northsecondnscorr,
-	"Gryffindor": gryffindor,
-	"Myrtle's Bathroom": myrtle,
-	"Chute": chute,
-	"Chamber of Secrets": chamber,
-	"NWGreatHall": nwgreathall,
-	"NEGreatHall": negreathall,
-	"SWGreatHall": swgreathall,
-	"SEGreatHall": segreathall,
-	"Disused Room": disusedroom,
-	"Divination": divination,
-	"Trophy Room": trophy,
-	"North Basement Corridor": nbasecorr,
-	"South Basement Corridor": sbasecorr,
-	"Hufflepuff": hufflepuff,
-	"Kitchen": kitchens,
-	"Emerald Hall": emeraldhall,
-	"Slytherin": slytherin,
-	"Dungeons": dungeons,
-	"Filch's Office": filch,
-	"Potions Classroom": potions,
-	"Hospital": hospital,
-	"Castle Gates": gates,
-	"Path to Hogsmeade": hogspath,
-	"Dark Tunnel": hogstunneltwo,
-	"Entrance to the One-Eyed Witch's Passage": witch,
-	"WestThirdEWCorr": westthirdewcorr,
-	"EastThirdEWCorr": eastthirdewcorr,
-	"Astronomy Tower Hall": astrohall,
-	"Headmaster's Tower": dumblehall,
-	"Gargoyle": dumblegarg,
-	"Headmaster's Stairs": dumblestair,
-	"Headmaster's Office": dumbledore,
-	"Owlery": owlery,
-	"Third Floor Corridor": requirehall,
-	"Astronomy Tower Landing": ravenhall,
-	"Top of Astronomy Tower": astronomy,
-	"Ravenclaw Common Room": ravenclaw}
+	phonebook = {"The Quad": start, "Stair Hall": stair_hall, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary, "East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr, "EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr, "Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber, "NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall, "Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr, "South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall, "Slytherin": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions, "Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch, "WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall, "Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair, "Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall, "Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw}
+	
 
-
-
-def make_paths():
 
 	start.add_paths({'n': stair_hall, 's': quidditch, 'e': gates})
 	gates.add_paths({'w': start})
@@ -258,4 +209,6 @@ def make_paths():
 	ravenhall.add_paths({'d': astrohall, 'u': astronomy, 'w': ravenclaw})
 	astronomy.add_paths({'d': ravenhall})
 	ravenclaw.add_paths({'e': ravenhall})
+	
+	return phonebook
 

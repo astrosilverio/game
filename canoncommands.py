@@ -1,206 +1,141 @@
-from bin.dictionary import *
-from rooms import *
-from bin.help import *
-from spells import *
+import bin.help as help
+import spells
 import pickle
-
 import things
+
 objectlist = things.make_things()
 
-#suggest wrapping all these in an object
+class Commands(object):
 
-def go(direction):
-#	if direction not in directions
-	next = phonebook.get(you.location, None).paths.get(direction, None)
-	if direction == 'd' and you.flying == True:
-		if you.location == 'Flying':
-			you.flying = False
-			print "You have successfully dismounted.\n"
-			you.location = 'Quidditch Pitch'
-			return phonebook[you.location].look()
+	def go(self, direction, player):
+		return player.go(direction)
+		
+	def fly(self, player):
+		return player.fly()
+		
+	def where(self, player):
+		print "You are in " + player.location	
+	
+	def invent(self, player):
+		return player.look()
+		
+	def look(self, player):
+		return phonebook[player.location].look()
+	
+	def sort(self, player):
+		return sortingquiz.try_to_enter(player)
+
+	def help(self, args):
+		print help.helpstatement
+
+	def quit(self, args):
+		save = raw_input("Leave without saving? (y/n)"  )
+		if save == 'y':
+			exit(0)
 		else:
-			you.flying = False
-			print "You have successfully dismounted.\n"
-			print you.location
-			return phonebook[you.location].look()
-	if next:
-		if hasattr(next, 'try_to_enter'):
-			next.try_to_enter()
-		else:
-			you.location = next.name
-			print you.location
-			return phonebook[you.location].look()
-	else:
-		print "You can't go that way!"
-		
-def fly(args):
+			pass	
 
-	you.flying = True
-
-	if "broom" in you.invent:
-		print "You are flying! Everything looks different up here."
-	else:
-		print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
-	if you.location == "Quidditch Pitch":
-		you.location = "Flying"
-		return flying.look()
-	else:
-		pass
-	if "bludger" in phonebook[you.location].invent:
-		print "An unsecured bludger clocks you in the head. You come to your senses painfully and your vision clears slowly.\n"
-		you.flying = False
-		you.location = "Hospital"
-		print you.location
-		return phonebook[you.location].look()
-		
-		
-def where(args):
-	print "You are in " + you.location	
-	
-def invent(args):
-	return you.look()
-		
-def look(args):
-	return phonebook[you.location].look()
-	
-def sort(args):
-	return sortingquiz.try_to_enter(you)
-
-def help(args):
-	print helpstatement
-
-def quit(args):
-	save = raw_input("Leave without saving? (y/n)"  )
-	if save == 'y':
-		exit(0)
-	else:
-		pass	
-
-def save(args):
-	if you.name:
-		confirm = raw_input("Save as " + you.name + "? (y/n)  ")
-		confirm = confirm.lower()
-		if confirm == 'y':
-			file = open(you.name.lower()+"_save.py", 'w')
-		else:
-			savename = raw_input("Save under what name? ")
-			file = open(savename.lower()+"_save.py", 'w')
-		file.truncate
-		pickle.dump(you, file)
-		file.close
-	else:
-		you.name = raw_input("Save under what name? ")
-		file = open(you.name.lower()+"_save.py", 'w')
-		file.truncate
-		pickle.dump(you, file)
-		file.close
-		
-def load(args):		
-		
-	namefile = raw_input("What name did you save under? ")
-	file = open(namefile.lower()+"_save.py", 'rb')
-	player = pickle.load(file)
-	you.name = player.name
-	you.location = player.location
-	you.house = player.house
-	you.patronus = player.patronus
-	you.light = player.light
-	you.flying = player.flying
-	you.invent = player.invent
-	
-def speak_parseltongue(args):
-	if you.location == "Myrtle's Bathroom":
-		print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
-		myrtle.description = myrtle.description + "\nThe sink circle has opened to reveal a dark chute."
-		myrtle.add_paths({'d': chute})
-	if you.location == "Slytherin":
-		print "The eyes on the many carved snake decorations glow green."
-	else:
-		print "Nothing happens."	
-		
-def info(args):
-	return you.info()
-		
-	
-def drop(thing):
-	return you.move(thing, phonebook[you.location])
-	
-def take(thing):
-	if objectlist[thing].grabbable == True:
-		return phonebook[you.location].move(thing, you)
-	else:
-		print "You can't take that."
-		
-def eat(thing):
-	if objectlist[thing].edible == True:	
-		if thing in you.invent:
-			print objectlist[thing].taste
-			return you.move(thing, phonebook[objectlist[thing].home])
-		elif thing in phonebook[you.location].invent:
-			print objectlist[thing].taste
-			if you.location != objectlist[thing].home:
-				return phonebook[you.location].move(thing, phonebook[objectlist[thing].home])
+	def save(self, player):
+		if player.name:
+			confirm = raw_input("Save as " + player.name + "? (y/n)  ")
+			confirm = confirm.lower()
+			if confirm == 'y':
+				save_game = open(player.name.lower()+"_save.py", 'w')
 			else:
-				pass
+				savename = raw_input("Save under what name? ")
+				save_game = open(savename.lower()+"_save.py", 'w')
+			save_game.truncate
+			pickle.dump(player, save_game)
+			save_game.close
 		else:
-			print "I don't see what you want me to eat."	
-	else:
-		print "I can't eat that!"
+			player.name = raw_input("Save under what name? ")
+			save_game = open(player.name.lower()+"_save.py", 'w')
+			save_game.truncate
+			pickle.dump(player, save_game)
+			save_game.close
 		
-def cast(incantation):
-	if "wand" in you.invent:
-		spellbook = Spells(you)
-		spell = getattr(spellbook, incantation)
-		spell()
-	else:
-		print "You need your wand to cast spells!"
+	def load(self, args):		
+		namefile = raw_input("What name did you save under? ")
+		file = open(namefile.lower()+"_save.py", 'rb')
+		player = pickle.load(file)
+		you.name = player.name
+		you.location = player.location
+		you.house = player.house
+		you.patronus = player.patronus
+		you.light = player.light
+		you.flying = player.flying
+		you.invent = player.invent
+	
+	def speak_parseltongue(self, player):
+		if player.location == "Myrtle's Bathroom":
+			print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
+			myrtle.description = myrtle.description + "\nThe sink circle has opened to reveal a dark chute."
+			myrtle.add_paths({'d': chute})
+		if player.location == "Slytherin":
+			print "The eyes on the many carved snake decorations glow green."
+		else:
+			print "Nothing happens."	
+		
+	def info(self, player):
+		player.info()
+			
+	def drop(self, thing, player):
+		player.drop(thing)
+	
+	def take(self, thing, player):
+		player.take(thing)
+	
+	def eat(self, thing, player):
+		player.eat(thing)
+		
+	def cast(self, incantation, player):
+		if "wand" in player.invent:
+			spellbook = spells.Spells(player)
+			spell = getattr(spellbook, incantation)
+			spell()
+		else:
+			print "You need your wand to cast spells!"
 
-def find_distance(room, object):
-	dist = 0
-	linked = set([room])
-	accessible_things = set(room.invent.values())
-	while object not in accessible_things:
-		dist += 1
-		temp = set()
-		for chamber in linked:
-			temp.update(chamber.paths.values())
-		linked = linked.union(temp)
-		for chamber in linked:
-			accessible_things.update(chamber.invent.values())
-	return dist
+	def accio(self, thing, player):
 	
-def locate_object(thing):
-	location = []
-	while len(location) < 1:
-		for room in phonebook:
-			if thing in phonebook[room].invent.values():
-				location.append(phonebook[room])
-	return location	
+		def find_distance(room, object):
+			dist = 0
+			location = None
+			linked = set([room])
+			accessible_things = set(room.invent.values())
+			while object not in accessible_things and dist <= 4:
+				dist += 1
+				temp = set()
+				for chamber in linked:
+					temp.update(chamber.paths.values())
+				linked = linked.union(temp)
+				for chamber in linked:
+					if object in chamber.invent.values():
+						location = chamber
+					accessible_things.update(chamber.invent.values())
+			return dist, location
 	
-	
-def accio(thing):
-	if 'wand' in you.invent:
-		if objectlist[thing].grabbable == True:
-			if thing in you.invent:
-				print "You already have that!"
-			else:
-				dist = find_distance(phonebook[you.location], objectlist[thing])
-				if dist <= 3:
-					thing_location = locate_object(objectlist[thing])[0]
-					print "The %s flies toward you alarmingly quickly." % thing
-					return thing_location.move(thing, you)
+		if 'wand' in player.invent:
+			if objectlist[thing].grabbable == True:
+				if thing in player.invent:
+					print "You already have that!"
 				else:
-					print "You try and try, but are not strong enough to summon the %s." % thing
+					dist, thing_location = find_distance(phonebook[player.location], objectlist[thing])
+					if dist <= 3:
+						print "The %s flies toward you alarmingly quickly." % thing
+						return thing_location.move(thing, player)
+					else:
+						print "You try and try, but are not strong enough to summon the %s." % thing
+			else:
+				print "You're not strong enough to move that."
 		else:
-			print "You're not strong enough to move that."
-	else:
-		print "You can't cast spells without your wand!"
+			print "You can't cast spells without your wand!"
 
 
-def x(thing):
-	if thing in you.invent or thing in phonebook[you.location].invent:
-		return objectlist[thing].examine()
-	else:
-		print "I don't see that here."		
+	def x(self, thing):
+		if thing in you.invent or thing in phonebook[you.location].invent:
+			return objectlist[thing].examine()
+		else:
+			print "I don't see that here."		
 
-canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'info': info, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}
+	canons = {'go': go, 'fly': fly, 'where': where, 'invent': invent, 'look': look, 'sort': sort, 'help': help, 'quit': quit, 'save': save, 'load': load, 'sssssssssss': speak_parseltongue, 'info': info, 'take': take, 'drop': drop, 'eat': eat, 'cast': cast, 'accio': accio, 'x': x}
