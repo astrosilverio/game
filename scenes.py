@@ -1,12 +1,10 @@
 from random import randint
 
-
 quips = ["""You are knocked out. When you come to, you are a silvery misty version of yourself looking down at your own limp body. You are a ghost.""",
 			"""Too bad you're not a cat. GAME OVER.""",
 			"""You are dead. Sucks to be you.""",
 			"""You are sent to Smeltings. Sorry."""]
 					
-
 class Scene(object):
 
 	def __init__(self):

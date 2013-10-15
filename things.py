@@ -1,4 +1,3 @@
-
 class Thing(object):
 
 	def __init__(self, name, description):
@@ -29,8 +28,6 @@ class Edibles(Thing):
 		self.taste = taste
 		self.home = home
 	
-
-
 def make_things():
 	broom = Thing("broom", "A non-descript broom awaits you.")
 	bludger = Thing("bludger", "A bludger is twitching on the ground.")
@@ -49,7 +46,6 @@ def make_things():
 	candy.detail = "They appear to be fizzing whizbees."
 	bones.detail = "The skeleton is of a large, dinosaur-like creature."
 	food.detail = "It appears to be haggis."
-
 
 	return {'broom': broom, 'bludger': bludger, 'wand': wand, 'snitch': snitch, 'candy': candy, 'food': food, 'mirror': mirror, 'bones': bones}
 

@@ -13,7 +13,6 @@ you = scenes.Player()
 objectlist = things.make_things()
 phonebook = rooms.make_rooms()
 
-
 phonebook["Quidditch Pitch"].add_invent(objectlist['broom'])
 phonebook["Quidditch Pitch"].add_invent(objectlist['bludger'])
 phonebook["The Quad"].add_invent(objectlist['wand'])
