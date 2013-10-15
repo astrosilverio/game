@@ -23,14 +23,14 @@ class Commands(object):
 		return phonebook[player.location].look()
 	
 	def sort(self, player):
-		return sortingquiz.try_to_enter(player)
+		return phonebook["Sorting Quiz"].try_to_enter(player)
 
 	def help(self, args):
 		print help.helpstatement
 
 	def quit(self, args):
-		save = raw_input("Leave without saving? (y/n)"  )
-		if save == 'y':
+		save_or_not = raw_input("Leave without saving? (y/n)"  )
+		if save_or_not == 'y':
 			exit(0)
 		else:
 			pass	
