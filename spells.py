@@ -4,7 +4,6 @@ from random import choice
 class Spells(object):
 
 	def __init__(self, player):
-		self.name = name
 		self.you = player
 
 	def patronus(self):

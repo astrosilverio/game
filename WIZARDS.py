@@ -10,25 +10,25 @@ import pdb
 death = scenes.Death()
 you = scenes.Player()
 
-object_list = things.make_things()
+objectlist = things.make_things()
 phonebook = rooms.make_rooms()
-rooms.make_paths()
 
-quidditch.add_invent(objectlist['broom'])
-quidditch.add_invent(objectlist['bludger'])
-start.add_invent(objectlist['wand'])
-flying.add_invent(objectlist['snitch'])
-disusedroom.add_invent(objectlist['mirror'])
-kitchens.add_invent(objectlist['food'])
-nwgreathall.add_invent(objectlist['candy'])
-chamber.add_invent(objectlist['bones'])
+
+phonebook["Quidditch Pitch"].add_invent(objectlist['broom'])
+phonebook["Quidditch Pitch"].add_invent(objectlist['bludger'])
+phonebook["The Quad"].add_invent(objectlist['wand'])
+phonebook["Flying"].add_invent(objectlist['snitch'])
+phonebook["Disused Room"].add_invent(objectlist['mirror'])
+phonebook["Kitchen"].add_invent(objectlist['food'])
+phonebook["NWGreatHall"].add_invent(objectlist['candy'])
+phonebook["Chamber of Secrets"].add_invent(objectlist['bones'])
 
 you.location = 'The Quad'
 print phonebook[you.location].name	
 phonebook[you.location].look()
-stair_hall.initialize()
+phonebook["Stair Hall"].shuffle_stairs()
 	
 while True:
 	input = raw_input("> ")
-	next = thesaurus.process(input)
+	next = thesaurus.process(input, you)
 	
