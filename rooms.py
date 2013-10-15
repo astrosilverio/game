@@ -115,17 +115,15 @@ class Player(Scene):
 			print "You are flying! Everything looks different up here."
 		else:
 			print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
-		if self.location == "Quidditch Pitch":
-			self.location = "Flying"
-			return phonebook["Flying"].look(self)
-		else:
-			pass
 		if "bludger" in phonebook[self.location].invent:
 			print "An unsecured bludger clocks you in the head. You come to your senses painfully and your vision clears slowly.\n"
 			self.flying = False
 			self.location = "Hospital"
 			print self.location
 			return phonebook[self.location].look(self)
+		if self.location == "Quidditch Pitch":
+			self.location = "Flying"
+			return phonebook["Flying"].look(self)
 																	
 class Death(object):
 	
