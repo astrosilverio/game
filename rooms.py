@@ -82,27 +82,31 @@ class Player(Scene):
 			
 	def go(self, direction):
 		#	if direction not in directions
-		next = phonebook.get(self.location, None).paths.get(direction, None)
-		if direction == 'd' and self.flying == True:
-			if self.location == 'Flying':
-				self.flying = False
-				print "You have successfully dismounted.\n"
-				self.location = 'Quidditch Pitch'
-				return phonebook[self.location].look(self)
-			else:
-				self.flying = False
-				print "You have successfully dismounted.\n"
-				print self.location
-				return phonebook[self.location].look(self)
-		if next:
+		try:
+			nextname = phonebook[self.location].paths[direction]
+			next = phonebook[nextname]
+		except KeyError:
+			print "You can't go that way!"
+		else:	
+			if direction == 'd' and self.flying == True:
+				if self.location == 'Flying':
+					self.flying = False
+					print "You have successfully dismounted.\n"
+					self.location = 'Quidditch Pitch'
+					return phonebook[self.location].look(self)
+				else:
+					self.flying = False
+					print "You have successfully dismounted.\n"
+					print self.location
+					return phonebook[self.location].look(self)
+
 #			if hasattr(next, 'try_to_enter'):
 #				next.try_to_enter()
 #			else:
 			self.location = next.name
 			print self.location
 			phonebook[self.location].look(self)
-		else:
-			print "You can't go that way!"
+
 					
 	def fly(self):
 		self.flying = True
@@ -188,7 +192,7 @@ class Room(Scene):
 				pass						
 
 	def shuffle_stairs(self):
-		self.add_paths({'u': choice(self.stairrooms)})
+		self.add_paths({'u': choice(self.stairrooms).name})
 		
 	def try_to_enter(self, player):
 		user_input = raw_input(self.password_prompt).lower()
@@ -213,7 +217,7 @@ class GreatHall(Room):
 	def look(self):
 		if self.first_time_here:
 			self.first_time_here = False
-			self.otherplace.try_to_enter()
+			sortingquiz.try_to_enter()
 		else:
 			print self.description + '\n'
 			for name, thing in self.invent.items():
