@@ -1,7 +1,7 @@
-import canoncommands
+import commands
 import bin.dictionary as dictionary
 
-commands = canoncommands.Commands()
+commands = commands.Commands()
 
 canonwords = []
 canonwords.extend(dictionary.directions)
@@ -23,7 +23,7 @@ def process(user_input, player):
 		
 	else:
 		words = user_input.split()
-		words = [word if (word in commands.canons.keys() or word in canonwords) else noncanonicals.get(word, None) for word in words]
+		words = [word if (word in dir(commands) or word in canonwords) else noncanonicals.get(word, None) for word in words]
 		words = [word for word in words if word is not None]
 
 		if words:
