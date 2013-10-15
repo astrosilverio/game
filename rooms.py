@@ -1,7 +1,133 @@
-from scenes import *
-from random import choice
-from quiz import *
-from riddles import *
+from random import choice, randint
+from quiz import SortingQuiz, quiz
+from riddles import riddles
+from things import objectlist
+
+quips = ["""You are knocked out. When you come to, you are a silvery misty version of yourself looking down at your own limp body. You are a ghost.""",
+			"""Too bad you're not a cat. GAME OVER.""",
+			"""You are dead. Sucks to be you.""",
+			"""You are sent to Smeltings. Sorry."""]
+					
+class Scene(object):
+
+	def __init__(self):
+		self.invent = {}
+		
+	def add_invent(self, stuff):
+		self.invent.update({stuff.name: stuff})
+		
+	def remove_invent(self, stuff):
+		del self.invent[stuff.name]
+			
+	def move(self, thing, destination):
+		if thing in self.invent.keys():
+			if thing not in destination.invent.keys():
+				item = self.invent[thing]
+				destination.add_invent(item)
+				self.remove_invent(item)
+				item.location = destination
+			else:
+				print "You're already carrying it!"
+		else:
+			print "I don't see that here."
+
+class Player(Scene):
+
+	def __init__(self):
+		self.name = ''
+		self.house = ''
+		self.patronus = ''
+		self.flying = False
+		self.light = False
+		self.invent = {}
+
+	def look(self):
+		print "You are carrying:"
+		for name, thing in self.invent.items():
+			print thing.name
+	
+	def info(self):
+		if self.name:
+			print "Your name is %s." % self.name
+		if self.house:
+			print "You are in %s House!" % self.house
+		if self.patronus:
+			print "Your patronus is a %s." % self.patronus
+			
+	def drop(self, thing):
+		self.move(thing, phonebook[self.location])
+		
+	def take(self, thing):
+		if objectlist[thing].grabbable == True:
+			phonebook[self.location].move(thing, self)
+		else:
+			print "You can't take that."
+			
+	def eat(self, thing):
+		if objectlist[thing].edible == True:	
+			if thing in self.invent:
+				print objectlist[thing].taste
+				return self.move(thing, phonebook[objectlist[thing].home])
+			elif thing in phonebook[self.location].invent:
+				print objectlist[thing].taste
+				if self.location != objectlist[thing].home:
+					return phonebook[self.location].move(thing, phonebook[objectlist[thing].home])
+				else:
+					pass
+			else:
+				print "I don't see what you want me to eat."	
+		else:
+			print "I can't eat that!"
+			
+	def go(self, direction):
+		#	if direction not in directions
+		next = phonebook.get(self.location, None).paths.get(direction, None)
+		if direction == 'd' and self.flying == True:
+			if self.location == 'Flying':
+				self.flying = False
+				print "You have successfully dismounted.\n"
+				self.location = 'Quidditch Pitch'
+				return phonebook[self.location].look(self)
+			else:
+				self.flying = False
+				print "You have successfully dismounted.\n"
+				print self.location
+				return phonebook[self.location].look(self)
+		if next:
+#			if hasattr(next, 'try_to_enter'):
+#				next.try_to_enter()
+#			else:
+			self.location = next.name
+			print self.location
+			phonebook[self.location].look(self)
+		else:
+			print "You can't go that way!"
+					
+	def fly(self):
+		self.flying = True
+
+		if "broom" in self.invent:
+			print "You are flying! Everything looks different up here."
+		else:
+			print "You're not He-Who-Must-Not-Be-Named. Broom is necessary."
+		if self.location == "Quidditch Pitch":
+			self.location = "Flying"
+			return phonebook["Flying"].look()
+		else:
+			pass
+		if "bludger" in phonebook[self.location].invent:
+			print "An unsecured bludger clocks you in the head. You come to your senses painfully and your vision clears slowly.\n"
+			self.flying = False
+			self.location = "Hospital"
+			print self.location
+			return phonebook[self.location].look()
+																	
+class Death(object):
+	
+	def look(self):
+		print quips[randint(0,len(quips)-1)]		
+		exit(1)
+
 
 class Room(Scene):
 
@@ -22,19 +148,19 @@ class Room(Scene):
 	def add_paths(self, paths):
 		self.paths.update(paths)
 
-	def look(self):
+	def look(self, player):
 		
 		if self.stairrooms:
 			self.shuffle_stairs()
 
 		if self.dark:
-			self.look_darkly()
+			self.look_darkly(player)
 		
 		else:
 			proceed = True
 			
 			if self.password:
-				proceed = self.try_to_enter()
+				proceed = self.try_to_enter(player)
 
 			if proceed == True:
 				output = self.description + '\n\n'
@@ -42,10 +168,10 @@ class Room(Scene):
 					output = output + thing.description + '\n'
 				print output
 
-	def look_darkly(self):
+	def look_darkly(self, player):
 		print self.description + '\n'
 
-		if you.light == True:
+		if player.light == True:
 			print "You can see by the faint blue light of your wand."
 			for name, thing in self.invent.items():
 				print thing.description
@@ -54,9 +180,9 @@ class Room(Scene):
 			num = randint(0,1)
 			if num == 0:
 				print "\nYou seem to have been bitten by a bowtruckle. You pass out and wake up %s." % self.dark_wakeup.name
-				you.location = self.dark_wakeup.name
-				print you.location.name
-				phonebook[you.location].look()
+				player.location = self.dark_wakeup.name
+				print player.location.name
+				phonebook[player.location].look()
 			else:
 				pass						
 
@@ -67,11 +193,11 @@ class Room(Scene):
 		input = raw_input(self.password_prompt)
 		input = input.lower()
 		if input == self.password:
-			you.location = self.name
+			player.location = self.name
 			return True
 		else:
 			print self.wrong_password
-			phonebook[you.location].look()
+			phonebook[player.location].look()
 			return False
 						
 class GreatHall(Room):
@@ -150,7 +276,7 @@ def make_rooms():
 	stairrooms = [westsecondewcorr, westlibrary, southsecondnscorr]
 	stair_hall = Room("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms=stairrooms)
 
-	phonebook = {"The Quad": start, "Stair Hall": stair_hall, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary, "East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr, "EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr, "Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber, "NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall, "Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr, "South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall, "Slytherin": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions, "Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch, "WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall, "Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair, "Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall, "Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw, "Sorting Quiz": sortingquiz}
+	phonebook = {"The Quad": start, "Stair Hall": stair_hall, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary, "East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr, "EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr, "Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber, "NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall, "Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr, "South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall, "Slytherin Common Room": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions, "Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch, "WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall, "Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair, "Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall, "Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw, "Sorting Quiz": sortingquiz}
 	
 
 
@@ -206,4 +332,17 @@ def make_rooms():
 	ravenclaw.add_paths({'e': ravenhall})
 	
 	return phonebook
+	
+	
+phonebook = make_rooms()
+
+phonebook["Quidditch Pitch"].add_invent(objectlist['broom'])
+phonebook["Quidditch Pitch"].add_invent(objectlist['bludger'])
+phonebook["The Quad"].add_invent(objectlist['wand'])
+phonebook["Flying"].add_invent(objectlist['snitch'])
+phonebook["Disused Room"].add_invent(objectlist['mirror'])
+phonebook["Kitchen"].add_invent(objectlist['food'])
+phonebook["NWGreatHall"].add_invent(objectlist['candy'])
+phonebook["Chamber of Secrets"].add_invent(objectlist['bones'])
+	
 

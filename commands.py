@@ -2,8 +2,9 @@ import bin.help as help
 import spells
 import pickle
 import things
+from rooms import phonebook
+from things import objectlist
 
-objectlist = things.make_things()
 
 class Commands(object):
 
@@ -20,7 +21,7 @@ class Commands(object):
 		return player.look()
 		
 	def look(self, player):
-		return phonebook[player.location].look()
+		return phonebook[player.location].look(player)
 	
 	def sort(self, player):
 		return phonebook["Sorting Quiz"].try_to_enter(player)
@@ -69,9 +70,9 @@ class Commands(object):
 	def speak_parseltongue(self, player):
 		if player.location == "Myrtle's Bathroom":
 			print "The sinks creakily move upward and outward, and the floor tile swings up to reveal a dark chute."
-			myrtle.description = myrtle.description + "\nThe sink circle has opened to reveal a dark chute."
-			myrtle.add_paths({'d': chute})
-		if player.location == "Slytherin":
+			phonebook["Myrtle's Bathroom"].description = phonebook["Myrtle's Bathroom"].description + "\nThe sink circle has opened to reveal a dark chute."
+			phonebook["Myrtle's Bathroom"].add_paths({'d': phonebook["Chute"]})
+		if player.location == "Slytherin Common Room":
 			print "The eyes on the many carved snake decorations glow green."
 		else:
 			print "Nothing happens."	
