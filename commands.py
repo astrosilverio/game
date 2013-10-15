@@ -4,7 +4,7 @@ import pickle
 import things
 from rooms import phonebook
 from things import objectlist
-
+from quiz import sortingquiz
 
 class Commands(object):
 
@@ -24,7 +24,7 @@ class Commands(object):
 		return phonebook[player.location].look(player)
 	
 	def sort(self, player):
-		return phonebook["Sorting Quiz"].try_to_enter(player)
+		return sortingquiz.try_to_enter(player)
 
 	def help(self, args):
 		print help.helpstatement

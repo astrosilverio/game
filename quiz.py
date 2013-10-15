@@ -103,5 +103,5 @@ class SortingQuiz(object):
 		
 #		you.location.look()
 
-
+sortingquiz = SortingQuiz(quiz)
 		
