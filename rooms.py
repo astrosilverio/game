@@ -190,9 +190,8 @@ class Room(Scene):
 		self.add_paths({'u': choice(self.stairrooms)})
 		
 	def try_to_enter(self, player):
-		user_input = raw_input(self.password_prompt)
-		user_input = user_input.lower()
-		if input == self.password:
+		user_input = raw_input(self.password_prompt).lower()
+		if user_input == self.password:
 			player.location = self.name
 			return True
 		else:
