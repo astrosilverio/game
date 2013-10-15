@@ -14,6 +14,6 @@ rooms.phonebook[you.location].look(you)
 rooms.phonebook["Stair Hall"].shuffle_stairs()
 	
 while True:
-	input = raw_input("> ")
-	next = thesaurus.process(input, you)
+	user_input = raw_input("> ")
+	next = thesaurus.process(user_input, you)
 	

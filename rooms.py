@@ -189,9 +189,9 @@ class Room(Scene):
 	def shuffle_stairs(self):
 		self.add_paths({'u': choice(self.stairrooms)})
 		
-	def try_to_enter(self):
-		input = raw_input(self.password_prompt)
-		input = input.lower()
+	def try_to_enter(self, player):
+		user_input = raw_input(self.password_prompt)
+		user_input = user_input.lower()
 		if input == self.password:
 			player.location = self.name
 			return True
