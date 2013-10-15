@@ -192,7 +192,7 @@ class Room(Scene):
 				pass						
 
 	def shuffle_stairs(self):
-		self.add_paths({'u': choice(self.stairrooms).name})
+		self.add_paths({'u': choice(self.stairrooms)})
 		
 	def try_to_enter(self, player):
 		user_input = raw_input(self.password_prompt).lower()

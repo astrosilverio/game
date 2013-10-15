@@ -17,9 +17,8 @@ noncanonicals = {'north': 'n', 'south': 's', 'west': 'w', 'east': 'e', 'northwes
 def process(user_input, player):
 	
 	if user_input.count('s') >= 11:
-		command = 'sssssssssss'
-		args = []
-		nargs = 0
+		command = 'speak_parseltongue'
+		args = [player]
 		
 	else:
 		words = user_input.split()
@@ -45,20 +44,21 @@ def process(user_input, player):
 			if nargs > 2:
 				print "I don't do very well with long instructions. Try typing 'help' to learn how to talk to me."
 				
-			try:
-				commands.__getattribute__(command)(*args)
-			except AttributeError:
-				print "What do you want me to do with %s?" % command
-			
+		else:
+			print "I didn't understand any of that."
+			return
+				
+	try:		
+		commands.__getattribute__(command)(*args)
+	except AttributeError:
+		print "What do you want me to do with %s?" % command
+	
 #				if command in canons.keys():
 #					return canons[command](*args)
 #			
 #				else:
 #					print "What do you want me to do with %s?" % command
-					
-		else:
-			print "I didn't understand any of that."
-
+				
 
 	
 	
