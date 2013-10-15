@@ -5,7 +5,7 @@ from riddles import *
 
 class Room(Scene):
 
-	def __init__(self, name, description, dark=False, dark_wakeup=None, stairrooms=None):
+	def __init__(self, name, description, dark=False, dark_wakeup=None, stairrooms=None, password_prompt=None, password=None, wrong_password=None):
 		self.name = name
 		self.description = description
 		self.paths = {}
@@ -15,21 +15,32 @@ class Room(Scene):
 		self.dark = dark
 		self.dark_wakeup = dark_wakeup
 		self.stairrooms = stairrooms
+		self.password_prompt = password_prompt
+		self.password = password
+		self.wrong_password = wrong_password
 		
 	def add_paths(self, paths):
 		self.paths.update(paths)
 
 	def look(self):
+		
 		if self.stairrooms:
 			self.shuffle_stairs()
 
 		if self.dark:
-			self.look_darkly
+			self.look_darkly()
+		
 		else:
-			output = self.description + '\n\n'
-			for name, thing in self.invent.items():
-				output = output + thing.description + '\n'
-			print output
+			proceed = True
+			
+			if self.password:
+				proceed = self.try_to_enter()
+
+			if proceed == True:
+				output = self.description + '\n\n'
+				for name, thing in self.invent.items():
+					output = output + thing.description + '\n'
+				print output
 
 	def look_darkly(self):
 		print self.description + '\n'
@@ -51,34 +62,18 @@ class Room(Scene):
 
 	def shuffle_stairs(self):
 		self.add_paths({'u': choice(self.stairrooms)})
-
 		
-class Password(Room):
-
-	def __init__(self, name, description, prompt, password, denial):
-		self.name = name
-		self.description = description
-		self.paths = {}
-		self.invent = {}
-		self.people = {}
-		self.prompt = prompt
-		self.password = password
-		self.denial = denial
-
-
 	def try_to_enter(self):
-	
-		input = raw_input(self.prompt)
+		input = raw_input(self.password_prompt)
 		input = input.lower()
 		if input == self.password:
 			you.location = self.name
-			phonebook[you.location].look()	
+			return True
 		else:
-			print self.denial
+			print self.wrong_password
 			phonebook[you.location].look()
-			
-
-			
+			return False
+						
 class GreatHall(Room):
 
 	def __init__(self, name, description, otherplace):
@@ -112,7 +107,7 @@ def make_rooms():
 	eastsecondewcorr = Room("EastSecondEWCorr", "You are at the eastern end of a long east-west corridor in the North Tower. There is a disused classroom to the north, and a stairway to the east.")
 	southsecondnscorr = Room("SouthSecondNSCorr", "You are at the southern end of a north-south corridor in Lion Tower. There is a doorway to the west and a stairway going down.")
 	northsecondnscorr = Room("NorthSecondNSCorr", "You are at the northern end of a north-south corridor in Lion Tower. There is a portrait of Dawn French on the eastern wall. A passage leads north and a narrow stairway is to the west.")
-	gryffindor = Password("Gryffindor", "You are in the Lion House Common Room! The circular room is filled with large comfy armchairs. Scarlet and gold hangings line the walls. A fire crackles in the fireplace. There is a hole in the wall to the west.", "Dawn French coughs lightly and says, 'Password?'  ","pig snout", "\n'Sorry dear, that was last week. Or the week before. Run along now.'\n")
+	gryffindor = Room("Gryffindor", "You are in the Lion House Common Room! The circular room is filled with large comfy armchairs. Scarlet and gold hangings line the walls. A fire crackles in the fireplace. There is a hole in the wall to the west.", password_prompt="Dawn French coughs lightly and says, 'Password?'  ", password="pig snout", wrong_password="\n'Sorry dear, that was last week. Or the week before. Run along now.'\n")
 	myrtle = Room("Myrtle's Bathroom", "You are in a disused girls' lavatory on the second floor. Someone is crying messily in one of the stalls. The sinks are arrayed in a curious circle, and the circular floor tile in the center of the sink-circle looks like it moves.")
 	chute = Room("Chute", "You slide down the dark chute and land in front of a door covered with elaborate snake carvings. When you repeat the hissing noise you made upstairs, the snakes writhe and the door swings open.\nThe Chamber of Secrets has been opened!")
 	chamber = Room("Chamber of Secrets", "You are in the Chamber of Secrets.")
@@ -129,7 +124,7 @@ def make_rooms():
 	hufflepuff = Room("Hufflepuff", "You are in the Hufflepuff Common Room. It is full of overstuffed armchairs. There is a large tapestry on the east wall and a fireplace on the west wall.")
 	kitchens = Room("Kitchen", "You are in the castle kitchen. Pots are boiling, fires are crackling, and sinks bubbling. The main door is to the west.")
 	emeraldhall = Room("Emerald Hall", "You are in a hall encrusted with emeralds. An ebony door is set into the southern, gem-like wall. A grimy passageway leads east. A green-lit stairway goes up.")
-	slytherin = Password("Slytherin", "You are in the Slyterin Common Room. There are windows that appear to look out into the lake.", "A silky voice murmurs, 'Password?' ", "giant squid", "\nThe door grates on its hinges as it shouts, 'BEGONE'!\n")
+	slytherin = Room("Slytherin", "You are in the Slyterin Common Room. There are windows that appear to look out into the lake.", password_prompt="A silky voice murmurs, 'Password?' ", password="giant squid", wrong_password="\nThe door grates on its hinges as it shouts, 'BEGONE'!\n")
 	dungeons = Room("Dungeons", "You are in the dungeons. They have obviously not been used or cleaned in a very long time. Slime appears to be oozing from the walls. You are seized by a strong urge to leave to the west.")
 	filch = Room("Filch's Office", "You are in a small, spotless room. A filing cabinet stands in the corner and a discontented cat hisses at you from the floor.")
 	potions = Room("Potions Classroom", "You are in the Potions classroom. Herbs hang from the ceiling. There is a general air of misery.")
@@ -139,23 +134,23 @@ def make_rooms():
 	hogstunnelone = Room("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
 	hogstunneltwo = Room("Dark Tunnel", "You are in a long dark tunnel.", dark=True, dark_wakeup=hospital)
 	hogstunnelthree = Room("Dark Tunnel", "You are in a long dark tunnel. There is a dim light from above.", dark=True, dark_wakeup=hospital)
-	witch = Password("Entrance to the One-Eyed Witch's Passage", "The statue creakily walks a pace towards you to expose a hole in the floor. It seems to be a very dark tunnel.", "You approach the singularly ugly statue, apparently of Gunhilda of Gorsemoor.\nYou have the impression that the statue is waiting for you to say something.\n", "dissendium", "\nThe statue's single eye fixes on you displeasedly.")
+	witch = Room("Entrance to the One-Eyed Witch's Passage", "The statue creakily walks a pace towards you to expose a hole in the floor. It seems to be a very dark tunnel.", password_prompt="You approach the singularly ugly statue, apparently of Gunhilda of Gorsemoor.\nYou have the impression that the statue is waiting for you to say something.\n", password="dissendium", wrong_password="\nThe statue's single eye fixes on you displeasedly.")
 	westthirdewcorr = Room("WestThirdEWCorr", "You are at the western end of a third-floor corridor. In a nook in the far western corner is a statue of a one-eyed, humpbacked witch.")
 	eastthirdewcorr = Room("EastThirdEWCorr", "You are at the eastern end of a third-floor corridor. There is a closed door in the north wall and a staircase going down.")
 	astrohall = Room("Astronomy Tower Hall", "You are on a low level of the Astronomy Tower. A spiral staircase winds up and down, and there are passageways to the north and south.")
 	dumblehall = Room("Headmaster's Tower", "You are in a small octagonal room in the Headmaster's Tower. A passageway leads south. A staircase that is more of a ladder disappears through a trapdoor in the ceiling. A door-sized gargoyle is on the east wall.")
-	dumblegarg = Password("Gargoyle", "The gargoyle swings out to reveal a stone spiral staircase.", "You can't be sure, but the gargoyle seems to blink at you as you approach it.\n", "fizzing whizbee", "The gargoyle continues to survey you impassively.")
+	dumblegarg = Room("Gargoyle", "The gargoyle swings out to reveal a stone spiral staircase.", password_prompt="You can't be sure, but the gargoyle seems to blink at you as you approach it.\n", password="fizzing whizbee", wrong_password="The gargoyle continues to survey you impassively.")
 	dumblestair = Room("Headmaster's Stairs", "You are on a tightly wound stone spiral staircase that noiselessy moves under your feet and you switch floors efforlessly. If you lift your foot up, it moves you up and vice versa.")
 	dumbledore = Room("Headmaster's Office", "You are in the Headmaster's Office.")
 	owlery = Room("Owlery", "You have climbed to the Owlery. The floor is cluttered with feathers and small bones.")
 	requirehall = Room("Third Floor Corridor", "You are in a non-descript third-floor corridor. There is a passage to the west and a door in the south wall.")
 	ravenhall = Room("Astronomy Tower Landing", "You are on a landing in the Astronomy Tower. In the west wall is a blue door with a bronze knocker set into it. A spiral staircase winds up and down.")
 	astronomy = Room("Top of Astronomy Tower", "You are out on the roof of the Astronomy Tower. The view is spectacular.")
-	ravenclaw = Password("Ravenclaw Common Room", "You are in the Ravenclaw Common Room.", "The eagle-shaped knocker intones, "+riddles[randint(0, len(riddles)-1)][0], riddles[randint(0, len(riddles)-1)][1], "\nThe knocker replies, 'Incorrect!'")
+	ravenclaw = Room("Ravenclaw Common Room", "You are in the Ravenclaw Common Room.", password_prompt="The eagle-shaped knocker intones, "+riddles[randint(0, len(riddles)-1)][0], password=riddles[randint(0, len(riddles)-1)][1], wrong_password="\nThe knocker knells, 'Incorrect!'")
 	stairrooms = [westsecondewcorr, westlibrary, southsecondnscorr]
 	stair_hall = Room("Stair Hall", "You are in a room with many stairways that appear to be continuously moving. There is a large door in the south wall, a small door in the north wall, and a broad archway to the east.", stairrooms=stairrooms)
 
-	phonebook = {"The Quad": start, "Stair Hall": stair_hall, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary, "East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr, "EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr, "Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber, "NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall, "Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr, "South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall, "Slytherin": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions, "Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch, "WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall, "Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair, "Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall, "Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw}
+	phonebook = {"The Quad": start, "Stair Hall": stair_hall, "Quidditch Pitch": quidditch, "Flying": flying, "West Library": westlibrary, "East Library": eastlibrary, "WestSecondEWCorr": westsecondewcorr, "CentralSecondEWCorr": centralsecondewcorr, "EastSecondEWCorr": eastsecondewcorr, "SouthSecondNSCorr": southsecondnscorr, "NorthSecondNSCorr": northsecondnscorr, "Gryffindor": gryffindor, "Myrtle's Bathroom": myrtle, "Chute": chute, "Chamber of Secrets": chamber, "NWGreatHall": nwgreathall, "NEGreatHall": negreathall, "SWGreatHall": swgreathall, "SEGreatHall": segreathall, "Disused Room": disusedroom, "Divination": divination, "Trophy Room": trophy, "North Basement Corridor": nbasecorr, "South Basement Corridor": sbasecorr, "Hufflepuff": hufflepuff, "Kitchen": kitchens, "Emerald Hall": emeraldhall, "Slytherin": slytherin, "Dungeons": dungeons, "Filch's Office": filch, "Potions Classroom": potions, "Hospital": hospital, "Castle Gates": gates, "Path to Hogsmeade": hogspath, "Dark Tunnel": hogstunneltwo, "Entrance to the One-Eyed Witch's Passage": witch, "WestThirdEWCorr": westthirdewcorr, "EastThirdEWCorr": eastthirdewcorr, "Astronomy Tower Hall": astrohall, "Headmaster's Tower": dumblehall, "Gargoyle": dumblegarg, "Headmaster's Stairs": dumblestair, "Headmaster's Office": dumbledore, "Owlery": owlery, "Third Floor Corridor": requirehall, "Astronomy Tower Landing": ravenhall, "Top of Astronomy Tower": astronomy, "Ravenclaw Common Room": ravenclaw, "Sorting Quiz": sortingquiz}
 	
 
 
