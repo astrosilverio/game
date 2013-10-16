@@ -43,6 +43,7 @@ class Player(Scene):
 		self.flying = False
 		self.light = False
 		self.invent = []
+		self.invisible = False
 
 	def look(self):
 		print "You are carrying:"
@@ -59,10 +60,14 @@ class Player(Scene):
 			
 	def drop(self, thing):
 		self.move(thing, phonebook[self.location])
+		if thing == 'cloak':
+			self.invisible = False
 		
 	def take(self, thing):
 		if objectlist[thing].grabbable == True:
 			phonebook[self.location].move(thing, self)
+			if thing == 'cloak':
+				self.invisible = True
 		else:
 			print "You can't take that."
 			
