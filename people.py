@@ -1,6 +1,8 @@
+import json
+
 class Person(object):
 
-	def __init__(self, name, description, quest_item=None, quest_complete=None, reward=()):
+	def __init__(self, name=None, description=None, quest_item=None, quest_complete=None, reward=()):
 		self.name = name
 		self.description = description
 		self.dialogue = []
@@ -53,24 +55,16 @@ class Person(object):
 					print self.dialogue[self.count]
 					self.count += 1
 
-
-def make_people():
-
-	myrtle = Person("Myrtle", "Myrtle is amusing herself by sobbing in between dives into the U-bend.")
-	mermaid = Person("A Mermaid", "Behind the glass is a mermaid, whose teeth are displayed in a fearsome grin.")
-	neville = Person("Neville", "Neville Longbottom is pacing around.", quest_item='trevor', quest_complete="Neville says, 'Thanks! I don't know how he keeps getting away...'", reward=("In his excitement over reuniting with Trevor, Neville has dropped a small piece of paper.", 'scrap of paper'))
-	owl = Person("Owl", "A large owl blinks at you intelligently.", quest_item='food', quest_complete="The owl wolfs down the food you brought him, clicking his beak.", reward=("The owl squawks 'TREVOR!' and scuffs away some droppings to reveal a small-ish toad.", 'trevor'))
-	draco = Person("Draco", "Draco Malfoy lounges while tossing a snitch in the air.")
 	
-	myrtle.add_dialogue(["Myrtle says, 'You're just here to throw a book at me!'", "Myrtle says, 'Leave me alone!', and dives back into the toilet."])
-	mermaid.add_dialogue(["The mermaid says something unintelligible that sounds like nails on a chalkboard.", "The mermaid says something that is clearly not friendly.", "The merm--hang on, why are you still here? She obviously wants to eat you, leave her alone!"])
-	neville.add_dialogue(["Neville says, 'I seem to have misplaced my toad. Can you find him?'", "Neville says, 'The Room of Requirement is stuck in sauna form, so the DA's meeting in the dungeons later.'", "Neville says,'Have we met? I'm Neville.'"])
-	owl.add_dialogue(["The owl squawks piteously, taps his stomach with one wing, and clicks his beak as if chewing.", "You feel a bit silly talking to an owl. He chirps in sympathy for your unease."])
-	draco.add_dialogue(["Draco sneers, 'That Granger girl better watch her back.'", "Draco says, 'You should come to the dance on Saturday.'"])
-		
-	npc = {'myrtle': myrtle, 'mermaid': mermaid, 'neville': neville, 'owl': owl, 'draco': draco}
+def make_people_from_json():
+	npc = {}
+	people = json.load(open("people.json"))
+	for name, person_data in people.iteritems():
+		npc[name] = Person()
+		npc[name].__dict__.update(person_data)
+
 	return npc
 
-npc = make_people()
+npc = make_people_from_json()
  
  
