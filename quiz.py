@@ -93,6 +93,7 @@ class SortingQuiz(object):
 			patronus = "raccoon"
 		elif name == 'erika':
 			patronus = "hedgehog"
+			print "Your patronus is a %s!" % patronus
 		else:
 			pass
 		
