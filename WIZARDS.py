@@ -1,4 +1,3 @@
-#import scenes
 import rooms
 import thesaurus
 from random import randint
@@ -15,6 +14,6 @@ rooms.phonebook["Stair Hall"].shuffle_stairs()
 	
 if __name__ == "__main__":
 	while True:
-		user_input = raw_input("> ")
+		user_input = raw_input("> ").lower()
 		next = thesaurus.process(user_input, you)
 	

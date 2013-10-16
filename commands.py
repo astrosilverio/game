@@ -26,9 +26,9 @@ class Commands(object):
 		
 	def talk(self, person, player):
 		if person in phonebook[player.location].people:
-			return npc[person].talk()
+			return npc[person].talk(player, phonebook[player.location])
 		else:
-			print "I don't see %s here." % person
+			print "I don't see %s here." % person.capitalize()
 	
 	def sort(self, player):
 		return sortingquiz.try_to_enter(player)
@@ -142,8 +142,8 @@ class Commands(object):
 			print "You can't cast spells without your wand!"
 
 
-	def x(self, thing):
-		if thing in you.invent or thing in phonebook[you.location].invent:
+	def x(self, thing, player):
+		if thing in player.invent or thing in phonebook[player.location].invent:
 			return objectlist[thing].examine()
 		else:
 			print "I don't see that here."		

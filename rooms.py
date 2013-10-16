@@ -5,6 +5,7 @@ from things import objectlist
 from people import npc
 import json
 
+
 quips = ["""You are knocked out. When you come to, you are a silvery misty version of yourself looking down at your own limp body. You are a ghost.""",
 			"""Too bad you're not a cat. GAME OVER.""",
 			"""You are dead. Sucks to be you.""",
@@ -212,7 +213,7 @@ class Room(Scene):
 			return True
 		else:
 			print self.wrong_password
-			phonebook[player.location].look()
+			phonebook[player.location].look(player)
 			return False
 						
 		

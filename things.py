@@ -16,7 +16,7 @@ class Thing(object):
 
 def make_things_from_json():
 	objectlist = {}
-	things = json.load(open("things_copy.json"))
+	things = json.load(open("things.json"))
 	for name, thing_data in things.iteritems():
 		objectlist[name] = Thing()
 		objectlist[name].__dict__.update(thing_data)
