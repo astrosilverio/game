@@ -134,7 +134,7 @@ class Death(object):
 
 class Room(Scene):
 
-	def __init__(self, name=None, description=None, dark=False, dark_wakeup=None, stairrooms=None, password_prompt=None, password=None, wrong_password=None):
+	def __init__(self, name=None, description=None, dark=False, dark_wakeup=None, stairrooms=None, password_prompt=None, password=None, wrong_password=None, first_time=None):
 		self.name = name
 		self.description = description
 		self.paths = {}
@@ -147,6 +147,7 @@ class Room(Scene):
 		self.password_prompt = password_prompt
 		self.password = password
 		self.wrong_password = wrong_password
+		self.first_time = first_time
 		
 	def add_paths(self, paths):
 		self.paths.update(paths)
@@ -158,6 +159,10 @@ class Room(Scene):
 
 		if self.dark:
 			self.look_darkly(player)
+			
+		if self.first_time:
+			self.first_time = False
+			sortingquiz.try_to_enter(player)
 		
 		else:
 			proceed = True
@@ -202,25 +207,6 @@ class Room(Scene):
 			phonebook[player.location].look()
 			return False
 						
-class GreatHall(Room):
-
-	def __init__(self, name, description):
-		self.name = name
-		self.description = description
-		self.paths = {}
-		self.invent = []
-		self.people = {}
-		self.first_time_here = True
-		
-	def look(self):
-		if self.first_time_here:
-			self.first_time_here = False
-			sortingquiz.try_to_enter()
-		else:
-			print self.description + '\n'
-			for thing in self.invent:
-				print objectlist[thing].description
-				
 		
 def make_rooms_from_json():
 	phonebook = {}
