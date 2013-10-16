@@ -5,6 +5,7 @@ import things
 from rooms import phonebook
 from things import objectlist
 from quiz import sortingquiz
+from people import npc
 
 class Commands(object):
 
@@ -22,6 +23,12 @@ class Commands(object):
 		
 	def look(self, player):
 		return phonebook[player.location].look(player)
+		
+	def talk(self, person, player):
+		if person in phonebook[player.location].people:
+			return npc[person].talk()
+		else:
+			print "I don't see %s here." % person
 	
 	def sort(self, player):
 		return sortingquiz.try_to_enter(player)

@@ -48,7 +48,7 @@ def process(user_input, player):
 			print "I didn't understand any of that."
 			return
 				
-	try:		
+	try:
 		commands.__getattribute__(command)(*args)
 	except AttributeError:
 		print "What do you want me to do with %s?" % command

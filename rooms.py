@@ -2,6 +2,7 @@ from random import choice, randint
 from quiz import sortingquiz
 from riddles import riddles
 from things import objectlist
+from people import npc
 import json
 
 quips = ["""You are knocked out. When you come to, you are a silvery misty version of yourself looking down at your own limp body. You are a ghost.""",
@@ -151,6 +152,9 @@ class Room(Scene):
 		
 	def add_paths(self, paths):
 		self.paths.update(paths)
+		
+	def add_people(self, people):
+		self.people.extend(people)
 
 	def look(self, player):
 		
@@ -175,6 +179,8 @@ class Room(Scene):
 				for thing in self.invent:
 					output = output + objectlist[thing].description + '\n'
 				print output
+				for person in self.people:
+					print npc[person].description + '\n'
 
 	def look_darkly(self, player):
 		print self.description + '\n'
@@ -183,6 +189,8 @@ class Room(Scene):
 			print "You can see by the faint blue light of your wand."
 			for thing in self.invent:
 				print objectlist[thing].description
+			for person in self.people:
+				print npc[person].description
 		else:
 			print "You can't see a thing. You might fall in a hole."
 			num = randint(0,1)
