@@ -1,4 +1,4 @@
 directions = ['n', 's', 'e', 'w', 'nw', 'ne', 'sw', 'se', 'u', 'd']
-nouns = ['bludger', 'snitch', 'cat', 'broom', 'spoon', 'wand', 'food', 'potion', 'toilet', 'diary', 'tea', 'mirror', 'raccoon', 'snitch', 'statue', 'willow', 'door', 'candy', 'bones', 'scrap of paper', 'trevor', 'cloak', 'invite', 'spider']
-people = ['hagrid', 'mcgonagall', 'dumbledore', 'snape', 'nick', 'myrtle', 'nightwing', 'crookshanks', 'bellatrix', 'flitwick', 'pince', 'fang', 'mermaid', 'neville', 'owl', 'draco']
+nouns = ['bludger', 'snitch', 'cat', 'broom', 'spoon', 'wand', 'food', 'potion', 'toilet', 'diary', 'tea', 'mirror', 'raccoon', 'snitch', 'statue', 'willow', 'door', 'candy', 'bones', 'scrap of paper', 'trevor', 'cloak', 'invite', 'spider', 'sword']
+people = ['hagrid', 'mcgonagall', 'dumbledore', 'snape', 'nick', 'myrtle', 'nightwing', 'crookshanks', 'bellatrix', 'flitwick', 'pince', 'fang', 'mermaid', 'neville', 'owl', 'draco', 'megan']
 spells = ['lumos', 'riddikulus', 'patronus', 'witch', 'alohomora', 'nox', 'wingardium', 'avada_kedavra']

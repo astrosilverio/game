@@ -50,7 +50,8 @@ class Person(object):
 				print self.quest_complete
 				print self.reward[0] + '\n'
 				room_object.add_invent(self.reward[1])
-				del self.dialogue[0]
+				if len(self.dialogue) > 1:
+					del self.dialogue[0]
 			else:
 				self.talk_normally()
 		else:
