@@ -108,12 +108,11 @@ class Player(Scene):
 					print self.location
 					return phonebook[self.location].look(self)
 
-#			if hasattr(next, 'try_to_enter'):
-#				next.try_to_enter()
-#			else:
-			self.location = next.name
-			print self.location
-			phonebook[self.location].look(self)
+			if next.password != None:
+				next.look(self)
+			else:
+				self.location = next.name
+				phonebook[self.location].look(self)
 
 					
 	def fly(self):
@@ -178,10 +177,11 @@ class Room(Scene):
 		else:
 			proceed = True
 			
-			if self.password:
+			if self.password and player.location != self.name:
 				proceed = self.try_to_enter(player)
 
 			if proceed == True:
+				print player.location +'\n'
 				output = self.description + '\n\n'
 				for thing in self.invent:
 					output = output + objectlist[thing].description + '\n'
@@ -213,7 +213,7 @@ class Room(Scene):
 		self.add_paths({'u': choice(self.stairrooms)})
 		
 	def try_to_enter(self, player):
-		user_input = raw_input(self.password_prompt).lower()
+		user_input = raw_input(self.password_prompt + '\n> ').lower()
 		if user_input == self.password:
 			player.location = self.name
 			return True

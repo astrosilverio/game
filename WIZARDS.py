@@ -10,7 +10,6 @@ death = rooms.Death()
 you = rooms.Player()
 
 you.location = 'The Quad'
-print rooms.phonebook[you.location].name	
 rooms.phonebook[you.location].look(you)
 rooms.phonebook["Stair Hall"].shuffle_stairs()
 	
