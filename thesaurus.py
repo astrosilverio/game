@@ -55,6 +55,8 @@ def process(user_input, player):
 		commands.__getattribute__(command)(*args)
 	except AttributeError:
 		print "What do you want me to do with %s?" % command
+	except TypeError:
+		print "What do you want to me to %s?" % command
 	
 #				if command in canons.keys():
 #					return canons[command](*args)

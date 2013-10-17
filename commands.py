@@ -114,6 +114,8 @@ class Commands(object):
 		dist = 0
 		location = None
 		linked = set([room])
+		if object in room.invent:
+			location = room
 		accessible_things = set(room.invent)
 		while object not in accessible_things and dist <= max_distance:
 			dist += 1
@@ -126,6 +128,8 @@ class Commands(object):
 			for chamber in linked:
 				if object in chamber.invent:
 					location = chamber
+				else:
+					location = None
 				accessible_things.update(chamber.invent)
 		return dist, location			
 
@@ -164,6 +168,8 @@ class Commands(object):
 					elif player.location == "Gryffindor":
 						print "A silver sword falls out of the hat. The Sorting Hat cannot tell the difference between someone in Gryffindor House and someone in Gryffindor Common Room."
 						phonebook[player.location].add_invent('sword')
+				else:
+					return
 		else:
 			print "I don't see that here."
 
