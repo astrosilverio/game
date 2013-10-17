@@ -12,7 +12,8 @@ canonwords.extend(dictionary.spells)
 noncanonicals = {'north': 'n', 'south': 's', 'west': 'w', 'east': 'e', 'northwest': 'nw',
 			'northeast': 'ne', 'southwest': 'sw', 'southeast': 'se', 'up': 'u', 'down': 'd',
 	'move': 'go', 'get': 'take', 'put': 'drop', 'examine': 'x', 'ride': 'fly', 'exit': 'quit', 'inventory': 'invent',
-			'nimbus': 'broom', 'erised': 'mirror', 'cup': 'tea', 'tree': 'willow', 'whizbees': 'candy', 'skeleton': 'bones', 'toad': 'trevor', 'paper': 'scrap of paper', 'scrap': 'scrap of paper'}
+			'nimbus': 'broom', 'erised': 'mirror', 'cup': 'tea', 'tree': 'willow', 'whizbees': 'candy', 'skeleton': 'bones', 'toad': 'trevor', 'paper': 'scrap of paper', 'scrap': 'scrap of paper', 'book': 'diary',
+			'patronum': 'patronus', 'avada': 'avada_kedavra'}
 
 def process(user_input, player):
 	
@@ -50,7 +51,7 @@ def process(user_input, player):
 			return
 				
 	try:
-#		print args
+#		print command, args
 		commands.__getattribute__(command)(*args)
 	except AttributeError:
 		print "What do you want me to do with %s?" % command

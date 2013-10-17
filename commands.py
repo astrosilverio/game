@@ -91,20 +91,29 @@ class Commands(object):
 		player.drop(thing)
 	
 	def take(self, thing, player):
+		if thing not in objectlist:
+			print "You can't take %s!" % thing
+			return			
 		player.take(thing)
 	
 	def eat(self, thing, player):
+		if thing not in objectlist:
+			print "You can't eat %s!" % thing
+			return
 		player.eat(thing)
 		
 	def cast(self, incantation, player):
 		if "wand" in player.invent:
-			spellbook = spells.Spells(player)
+			spellbook = spells.Spells(player, phonebook[player.location])
 			spell = getattr(spellbook, incantation)
 			spell()
 		else:
 			print "You need your wand to cast spells!"
 
 	def accio(self, thing, player):
+		if thing not in objectlist:
+			print "You can't accio %s!" % thing
+			return
 	
 		def find_distance(room, object):
 			dist = 0

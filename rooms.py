@@ -44,11 +44,12 @@ class Player(Scene):
 		self.light = False
 		self.invent = []
 		self.invisible = False
+		self.alive = True
 
 	def look(self):
 		print "You are carrying:"
 		for thing in self.invent:
-			print thing
+			print objectlist[thing].name
 	
 	def info(self):
 		if self.name:

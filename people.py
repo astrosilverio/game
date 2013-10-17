@@ -12,29 +12,33 @@ class Person(object):
 		self.count = 0
 		self.house_specific = house_specific
 		self.out_house = out_house
+		self.alive = True
 		
 	def add_dialogue(self, lines):
 		self.dialogue.extend(lines)
 	
 	def talk(self, player, room_object):
 	
-		if self.house_specific:
-			if player.house == self.house_specific:
-				if player.invisible == True:
-					self.talk_invisibly()
+		if self.alive or self.name == 'Myrtle':	
+			if self.house_specific:
+				if player.house == self.house_specific:
+					if player.invisible == True:
+						self.talk_invisibly()
+					else:
+						self.talk_visibly(player, room_object)
 				else:
-					self.talk_visibly(player, room_object)
-			else:
-				if player.invisible == True:
-					print self.out_house[1]
-				else:
-					print self.out_house[0]
+					if player.invisible == True:
+						print self.out_house[1]
+					else:
+						print self.out_house[0]
 		
-		else:
-			if player.invisible == True:
-				self.talk_invisibly()		
 			else:
-				self.talk_visibly(player, room_object)
+				if player.invisible == True:
+					self.talk_invisibly()		
+				else:
+					self.talk_visibly(player, room_object)				
+		else:
+			print "You can't talk to a corpse."
 				
 	def talk_invisibly(self):
 		print "%s appears not to notice you." % self.name

@@ -2,7 +2,7 @@ import json
 
 class Thing(object):
 
-	def __init__(self, name=None, description=None, grabbable=True, edible=False, taste=None, home=None):
+	def __init__(self, name=None, description=None, grabbable=True, edible=False, taste=None, home=None, alive=False, dead_description=None):
 		self.name = name
 		self.description = description
 		self.detail = "You notice nothing of interest."
@@ -10,6 +10,8 @@ class Thing(object):
 		self.edible = edible
 		self.taste = taste
 		self.home = home
+		self.alive = alive
+		self.dead_description = dead_description
 	
 	def examine(self):
 		print self.detail
