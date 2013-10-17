@@ -109,37 +109,38 @@ class Commands(object):
 			spell()
 		else:
 			print "You need your wand to cast spells!"
+			
+	def find_distance(self, room, object, max_distance):
+		dist = 0
+		location = None
+		linked = set([room])
+		accessible_things = set(room.invent)
+		while object not in accessible_things and dist <= max_distance:
+			dist += 1
+			temp = set()
+			for chamber in linked:
+				tempstrings = chamber.paths.values()
+				tempobjects = [phonebook[string] for string in tempstrings]
+				temp.update(tempobjects)
+			linked = linked.union(temp)
+			for chamber in linked:
+				if object in chamber.invent:
+					location = chamber
+				accessible_things.update(chamber.invent)
+		return dist, location			
 
 	def accio(self, thing, player):
 		if thing not in objectlist:
 			print "You can't accio %s!" % thing
 			return
 	
-		def find_distance(room, object):
-			dist = 0
-			location = None
-			linked = set([room])
-			accessible_things = set(room.invent)
-			while object not in accessible_things and dist <= 4:
-				dist += 1
-				temp = set()
-				for chamber in linked:
-					tempstrings = chamber.paths.values()
-					tempobjects = [phonebook[string] for string in tempstrings]
-					temp.update(tempobjects)
-				linked = linked.union(temp)
-				for chamber in linked:
-					if object in chamber.invent:
-						location = chamber
-					accessible_things.update(chamber.invent)
-			return dist, location
-	
 		if 'wand' in player.invent:
 			if objectlist[thing].grabbable == True:
 				if thing in player.invent:
 					print "You already have that!"
 				else:
-					dist, thing_location = find_distance(phonebook[player.location], thing)
+					dist, thing_location = self.find_distance(phonebook[player.location], thing, 4)
+					print dist, thing_location
 					if dist <= 3:
 						print "The %s flies toward you alarmingly quickly." % thing
 						return thing_location.move(thing, player)
@@ -153,7 +154,16 @@ class Commands(object):
 
 	def x(self, thing, player):
 		if thing in player.invent or thing in phonebook[player.location].invent:
-			return objectlist[thing].examine()
+			objectlist[thing].examine()
+			if thing == 'hat':
+				dist, location = self.find_distance(phonebook[player.location], 'sword', 50)
+				if location == None and'sword' not in player.invent:
+					if player.house == 'Lion':
+						print "A silver sword falls out of the hat. Congratulations! You are a true Gryffindor!"
+						phonebook[player.location].add_invent('sword')
+					elif player.location == "Gryffindor":
+						print "A silver sword falls out of the hat. The Sorting Hat cannot tell the difference between someone in Gryffindor House and someone in Gryffindor Common Room."
+						phonebook[player.location].add_invent('sword')
 		else:
-			print "I don't see that here."		
+			print "I don't see that here."
 
