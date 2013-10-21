@@ -1,8 +1,5 @@
 import rooms
 import thesaurus
-from random import randint
-import pickle
-import pdb
 from things import objectlist
 from people import npc
 

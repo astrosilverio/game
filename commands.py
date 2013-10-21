@@ -11,6 +11,7 @@ class Commands(object):
 
 	def go(self, direction, player):
 		return player.go(direction)
+# return is for communicating with outside world -- maybe not necessary here?
 		
 	def fly(self, player):
 		return player.fly()
@@ -128,8 +129,6 @@ class Commands(object):
 			for chamber in linked:
 				if object in chamber.invent:
 					location = chamber
-				else:
-					location = None
 				accessible_things.update(chamber.invent)
 		return dist, location			
 
@@ -144,7 +143,6 @@ class Commands(object):
 					print "You already have that!"
 				else:
 					dist, thing_location = self.find_distance(phonebook[player.location], thing, 4)
-					print dist, thing_location
 					if dist <= 3:
 						print "The %s flies toward you alarmingly quickly." % thing
 						return thing_location.move(thing, player)
@@ -158,7 +156,10 @@ class Commands(object):
 
 	def x(self, thing, player):
 		if thing in player.invent or thing in phonebook[player.location].invent:
-			objectlist[thing].examine()
+			if objectlist[thing].hidden == True and objectlist[thing].home == player.location:
+				print objectlist[thing].secret_detail
+			else:
+				objectlist[thing].examine()
 			if thing == 'hat':
 				dist, location = self.find_distance(phonebook[player.location], 'sword', 50)
 				if location == None and'sword' not in player.invent:

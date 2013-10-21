@@ -12,7 +12,7 @@ canonwords.extend(dictionary.spells)
 noncanonicals = {'north': 'n', 'south': 's', 'west': 'w', 'east': 'e', 'northwest': 'nw',
 			'northeast': 'ne', 'southwest': 'sw', 'southeast': 'se', 'up': 'u', 'down': 'd',
 	'move': 'go', 'get': 'take', 'put': 'drop', 'examine': 'x', 'ride': 'fly', 'exit': 'quit', 'inventory': 'invent',
-			'nimbus': 'broom', 'erised': 'mirror', 'cup': 'tea', 'tree': 'willow', 'whizbees': 'candy', 'skeleton': 'bones', 'toad': 'trevor', 'paper': 'scrap of paper', 'scrap': 'scrap of paper', 'book': 'diary',
+			'nimbus': 'broom', 'erised': 'mirror', 'cup': 'tea', 'tree': 'willow', 'whizbees': 'candy', 'skeleton': 'bones', 'toad': 'trevor', 'paper': 'scrap of paper', 'scrap': 'scrap of paper', 'jar': 'spider', "candles": "candle", "tapestries": "tapestry",
 			'patronum': 'patronus', 'avada': 'avada_kedavra'}
 
 def process(user_input, player):
@@ -58,11 +58,6 @@ def process(user_input, player):
 	except TypeError:
 		print "What do you want to me to %s?" % command
 	
-#				if command in canons.keys():
-#					return canons[command](*args)
-#			
-#				else:
-#					print "What do you want me to do with %s?" % command
 				
 
 	

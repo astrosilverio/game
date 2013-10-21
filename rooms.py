@@ -67,6 +67,8 @@ class Player(Scene):
 	def take(self, thing):
 		if objectlist[thing].grabbable == True:
 			phonebook[self.location].move(thing, self)
+			if objectlist[thing].hidden == True:
+				objectlist[thing].hidden = False
 			if thing == 'cloak':
 				self.invisible = True
 		else:
@@ -182,8 +184,9 @@ class Room(Scene):
 			if proceed == True:
 				print player.location +'\n'
 				output = self.description + '\n\n'
-				for thing in self.invent:
-					output = output + objectlist[thing].description + '\n'
+				stuff_to_print = [objectlist[thing].description+'\n' for thing in self.invent if objectlist[thing].hidden == False]
+				for thing in stuff_to_print:
+					output = output + thing
 				print output
 				for person in self.people:
 					print npc[person].description + '\n'
