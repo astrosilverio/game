@@ -157,7 +157,7 @@ class Commands(object):
 	def x(self, thing, player):
 		if thing in player.invent or thing in phonebook[player.location].invent:
 			if objectlist[thing].hidden == True and objectlist[thing].home == player.location:
-				print objectlist[thing].secret_detail
+				objectlist[thing].examine_special()
 			else:
 				objectlist[thing].examine()
 			if thing == 'hat':
