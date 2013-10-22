@@ -1,11 +1,11 @@
 import bin.help as help
 import spells
-import pickle
+import json
 import things
-from rooms import phonebook
-from things import objectlist
+from rooms import phonebook, Player, Room
+from things import objectlist, Thing
 from quiz import sortingquiz
-from people import npc
+from people import npc, Person
 
 class Commands(object):
 
@@ -37,10 +37,12 @@ class Commands(object):
 	def help(self, args):
 		print help.helpstatement
 
-	def quit(self, args):
+	def quit(self, player):
 		save_or_not = raw_input("Leave without saving? (y/n)"  )
 		if save_or_not == 'y':
 			exit(0)
+		elif save_or_not == 'n':
+			self.save(player)
 		else:
 			pass	
 
@@ -49,31 +51,61 @@ class Commands(object):
 			confirm = raw_input("Save as " + player.name + "? (y/n)  ")
 			confirm = confirm.lower()
 			if confirm == 'y':
-				save_game = open(player.name.lower()+"_save.py", 'w')
+				save_game = open(player.name.lower()+"_save.json", 'w')
 			else:
 				savename = raw_input("Save under what name? ")
-				save_game = open(savename.lower()+"_save.py", 'w')
+				save_game = open(savename.lower()+"_save.json", 'w')
 			save_game.truncate
-			pickle.dump(player, save_game)
-			save_game.close
+			player_states = {}
+			room_states = {}
+			thing_states = {}
+			npc_states = {}
+			player_states[player.name] = {k:v for k,v in player.__dict__.iteritems() if v}
+			for name, room in phonebook.iteritems():
+				room_states[name] = {k:v for k,v in room.__dict__.iteritems() if v}
+			for name, thing in objectlist.iteritems():
+				thing_states[name] = {k:v for k,v in thing.__dict__.iteritems() if v}
+			for name, person in npc.iteritems():
+				npc_states[name] = {k:v for k,v in person.__dict__.iteritems() if v}
+			states = [player_states, room_states, thing_states, npc_states]
+			json.dump(states, save_game)
+
 		else:
 			player.name = raw_input("Save under what name? ")
-			save_game = open(player.name.lower()+"_save.py", 'w')
+			save_game = open(player.name.lower()+"_save.json", 'w')
 			save_game.truncate
-			pickle.dump(player, save_game)
-			save_game.close
+			player_states[player.name] = {k:v for k,v in player.__dict__.iteritems() if k}
+			for name, room in phonebook.iteritems():
+				room_states[name] = {k:v for k,v in room.__dict__.iteritems() if k}
+			for name, thing in objectlist.iteritems():
+				thing_states[name] = {k:v for k,v in thing.__dict__.iteritems() if k}
+			for name, person in npc.iteritems():
+				npc_states[name] = {k:v for k,v in person.__dict__.iteritems() if k}
+			states = [player_states, room_states, thing_states, npc_states]
+			json.dump(states, save_game)
+
 		
-	def load(self, args):		
+	def load(self, player):		
 		namefile = raw_input("What name did you save under? ")
-		file = open(namefile.lower()+"_save.py", 'rb')
-		player = pickle.load(file)
-		you.name = player.name
-		you.location = player.location
-		you.house = player.house
-		you.patronus = player.patronus
-		you.light = player.light
-		you.flying = player.flying
-		you.invent = player.invent
+		save_game = open(namefile.lower()+"_save.json")
+		states = json.load(save_game)
+		player_states = states[0]
+		room_states = states[1]
+		thing_states = states[2]
+		npc_states = states[3]
+		
+		for att, player_data in player_states.iteritems():
+			player.__dict__.update(player_data)
+		for name, room_data in room_states.iteritems():
+			phonebook[name] = Room()
+			phonebook[name].__dict__.update(room_data)
+		for name, thing_data in thing_states.iteritems():
+			objectlist[name] = Thing()
+			objectlist[name].__dict__.update(thing_data)
+		for name, npc_data in npc_states.iteritems():
+			npc[name] = Person()
+			npc[name].__dict__.update(npc_data)
+
 	
 	def speak_parseltongue(self, player):
 		if player.location == "Myrtle's Bathroom":

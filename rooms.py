@@ -234,5 +234,6 @@ def make_rooms_from_json():
 
 	return phonebook
 	
+	
 phonebook = make_rooms_from_json()
 
